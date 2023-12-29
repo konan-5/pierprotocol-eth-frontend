@@ -119,12 +119,12 @@ const Header = () => {
               </ul>
               <div className="nav-btn d-lg-flex align-items-center justify-content-center mt-lg-0 mt-4 ms-auto">
                 <div className="d-flex gap-2 align-items-center justify-content-center mt-4 mt-lg-0">
-                  <Link href={""} className="btn-lg navbar-btn" onClick={connectWallet}>
+                  <a href={"#"} className="btn-lg navbar-btn" onClick={connectWallet}>
                     {isConnected ?
                       <span>Connected</span> :
                       <span>Connect Wallet</span>
                     }
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
