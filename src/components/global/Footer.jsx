@@ -19,7 +19,7 @@ const Footer = () => {
                             <div className="footer-nav">
                                 <Link href="#features">Key Features</Link>
                                 <Link href="#faq">Faq</Link>
-                                <Link href="">Gitbook</Link>
+                                <Link href="#" onClick={() => {window.location.assign(" https://pier-protocol.gitbook.io/pier-protocol/")}}>Gitbook</Link>
                             </div>
                             <div className="footer-social">
                                 <Link href=""><TwitterIcon/></Link>

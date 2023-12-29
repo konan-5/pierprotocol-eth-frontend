@@ -3,6 +3,7 @@ import { Tab, Nav } from "react-bootstrap";
 import Buy from "./Buy";
 import Sell from "./Sell";
 import Activity from "./Activity";
+import Link from "next/link";
 
 const Dashboard = () => {
   return (
@@ -26,7 +27,7 @@ const Dashboard = () => {
                     </Nav.Item>
                   </Nav>
                   <div className="ml-lg-auto">
-                    <button className="btn-lg">CREATE A TRADE</button>
+                    <Link href={"/list"} className="btn-lg">CREATE A TRADE</Link>
                   </div>
                 </div>
                 <Tab.Content>

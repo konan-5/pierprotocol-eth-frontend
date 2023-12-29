@@ -19,7 +19,7 @@ const Banner = () => {
                 meaningful connections that transcend boundaries.
               </p>
               <div className="d-flex justify-content-center gap-4">
-                <Link className="btn-lg btn-gray" href="/coming-soon">LAUNCH APP</Link>
+                <Link className="btn-lg btn-gray" href="/dashboard">LAUNCH APP</Link>
                 <button className="btn-lg">Buy $PIER</button>
               </div>
             </div>

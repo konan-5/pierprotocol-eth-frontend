@@ -112,7 +112,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li class="nav-item">
-                  <Link href="" className="nav-link" onClick={toggleOffcanvas}>
+                  <Link href="https://pier-protocol.gitbook.io/pier-protocol/" target="_blank" className="nav-link" onClick={toggleOffcanvas}>
                     Gitbook
                   </Link>
                 </li>

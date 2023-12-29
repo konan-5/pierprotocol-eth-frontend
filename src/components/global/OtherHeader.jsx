@@ -66,7 +66,7 @@ const OtherHeader = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="other-content">
-              <Link href="">
+              <Link href="/dashboard">
                 <Image src={logo} alt="logo" />
               </Link>
               <a href="#" className="btn-lg navbar-btn" onClick={connectWallet}>
