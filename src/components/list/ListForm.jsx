@@ -1,4 +1,4 @@
-import { getTokenDetails } from "@/utils/web3helper";
+import { getTokenDetails, orderTokenForSell } from "@/utils/web3helper";
 import React, { useEffect, useState } from "react";
 
 const ListForm = () => {
@@ -7,6 +7,7 @@ const ListForm = () => {
   const [tokenSymbol, setTokenSymbol] = useState("");
   const [balance, setBalance] = useState(-1);
   const [amountToSell, setAmountToSell] = useState(-1);
+  const [amountOfETH, setAmountOfETH] = useState(-1);
 
   useEffect(() => {
     if (tokenAddress.length == 42) {
@@ -46,8 +47,8 @@ const ListForm = () => {
               <input type="text" name="symbol" placeholder="Token Symbol" value={tokenSymbol} disabled />
               <input type="text" name="supply" placeholder="Balance" value={balance == -1 ? "" : balance} disabled />
               <input type="number" name="sell" placeholder="Amount To Sell" value={amountToSell == -1 ? "": amountToSell} onChange={(e) => {setAmountToSell(e.target.value)}}/>
-              <input type="text" name="eth" placeholder="Amount of ETH" />
-              <button type="submit" className="btn-lg">
+              <input type="text" name="eth" placeholder="Amount of ETH" value={amountOfETH == -1 ? "": amountOfETH} onChange={(e) => {setAmountOfETH(e.target.value)}} />
+              <button type="button" className="btn-lg" onClick={() => {orderTokenForSell(tokenAddress, amountToSell, amountOfETH)}}>
                 List For Sale
               </button>
             </form>
