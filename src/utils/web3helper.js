@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { ERC20, PierMarketplace } from './abi';
 
-// const provider = "https://ethereum-sepolia.publicnode.com"
+const provider = "https://ethereum-sepolia.publicnode.com"
 
 async function getTokenDetails(tokenAddress) {
     const web3 = new Web3(window.ethereum);
@@ -21,12 +21,22 @@ async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei
     const decimals = Number(await tokenContract.methods.decimals().call());
     const response = await tokenContract.methods.approve(process.env.NEXT_PUBLIC_PIER_MARKETPLACE, tokenAmountToSell * (10 ** decimals)).send({ from: accounts[0] });
     console.log(response)
-    
-    
-    // const approveStatus = await tokenContract.methods.approve(process.env.NEXT_PUBLIC_PIER_MARKETPLACE, tokenAmountToSell, accounts[0]).call();
+
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
-    const listStatus = await pierMarketplaceContract.methods.listTokenForSale(tokenAddress, tokenAmountToSell, sellPriceInWei, accounts[0]).send({from: accounts[0]})
+    const listStatus = await pierMarketplaceContract.methods.listTokenForSale(tokenAddress, tokenAmountToSell, sellPriceInWei, accounts[0]).send({ from: accounts[0] })
     console.log(listStatus)
 }
 
-export { getTokenDetails, orderTokenForSell }
+
+async function fetchSellTokenList() {
+    const web3 = new Web3(provider);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
+    const waiter = Number(await pierMarketplaceContract.methods.wtsListingCount().call())
+    console.log(waiter)
+    for (let i = 1; i <= waiter; i++) {
+        const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
+        console.log(wts)
+    }
+}
+
+export { getTokenDetails, orderTokenForSell, fetchSellTokenList }

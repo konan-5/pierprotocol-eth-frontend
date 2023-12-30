@@ -1,83 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Bitcoin from "../../assets/images/bitcoin-ic.svg";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
+import { fetchSellTokenList } from "@/utils/web3helper";
 
 const Buy = () => {
+  useEffect(() => {
+    fetchSellTokenList()
+  }, [])
   const [order, setOrder] = useState("ASC");
   const [buyData, setBuyData] = useState([
-    {
-      id: 1,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
-    {
-      id: 2,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
-    {
-      id: 3,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
-    {
-      id: 4,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
-    {
-      id: 5,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
-    {
-      id: 6,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
     {
       id: 7,
       token: {
@@ -91,8 +23,6 @@ const Buy = () => {
       seller: "0xffjeeedv",
     },
   ]);
-
-  
 
   const sorting = (col) => {
     const sortedData = [...buyData].sort((a, b) => {
