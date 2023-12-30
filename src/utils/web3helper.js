@@ -23,7 +23,7 @@ async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei
     console.log(response)
 
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
-    const listStatus = await pierMarketplaceContract.methods.listTokenForSale(tokenAddress, tokenAmountToSell, sellPriceInWei, accounts[0]).send({ from: accounts[0] })
+    const listStatus = await pierMarketplaceContract.methods.listTokenForSale(tokenAddress, tokenAmountToSell * (10 ** decimals), sellPriceInWei * (10 ** 18), accounts[0]).send({ from: accounts[0] })
     console.log(listStatus)
 }
 
@@ -33,10 +33,12 @@ async function fetchSellTokenList() {
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
     const waiter = Number(await pierMarketplaceContract.methods.wtsListingCount().call())
     console.log(waiter)
+    const waiterList = []
     for (let i = 1; i <= waiter; i++) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
-        console.log(wts)
+        waiterList.push(wts)
     }
+    return waiterList;
 }
 
 export { getTokenDetails, orderTokenForSell, fetchSellTokenList }

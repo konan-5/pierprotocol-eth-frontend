@@ -5,8 +5,9 @@ import Image from "next/image";
 import { fetchSellTokenList } from "@/utils/web3helper";
 
 const Buy = () => {
+  const [sellTokenList, setSellTokenList] = useState([])
   useEffect(() => {
-    fetchSellTokenList()
+    fetchSellTokenList().then((resp) => { setSellTokenList(resp) })
   }, [])
   const [order, setOrder] = useState("ASC");
   const [buyData, setBuyData] = useState([
@@ -92,9 +93,8 @@ const Buy = () => {
               <tr key={item.id}>
                 <td className="table-title">
                   <div
-                    className={`star-icon ${
-                      starStates[index] ? "start-button" : ""
-                    }`}
+                    className={`star-icon ${starStates[index] ? "start-button" : ""
+                      }`}
                     onClick={() => handleStarClick(index)}
                   ></div>
                   {item.id}

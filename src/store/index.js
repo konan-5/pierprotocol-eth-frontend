@@ -1,14 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
-// Initial state
 const initialState = {
+  sellList: [],
   counter: 0,
   toggle: false,
   text: ''
 };
 
-// Example reducer
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'INCREMENT':
@@ -19,12 +18,15 @@ const appReducer = (state = initialState, action) => {
       return { ...state, toggle: !state.toggle };
     case 'SET_TEXT':
       return { ...state, text: action.payload };
+    case 'ADD_SELL_LIST':
+      return {...state, sellList: [...state.sellList, action.payload]};
+    case 'REMOVE_SELL_LIST':
+      return { ...state, sellList: state.sellList.filter(item => item !== action.payload) };
     default:
       return state;
   }
 };
 
-// Configure store
 const makeStore = () => configureStore({
   reducer: {
     app: appReducer
