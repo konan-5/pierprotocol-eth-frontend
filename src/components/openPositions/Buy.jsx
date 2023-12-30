@@ -6,9 +6,6 @@ import { fetchSellTokenList } from "@/utils/web3helper";
 
 const Buy = () => {
   const [sellTokenList, setSellTokenList] = useState([])
-  useEffect(() => {
-    fetchSellTokenList().then((resp) => { setSellTokenList(resp) })
-  }, [])
   const [order, setOrder] = useState("ASC");
   const [buyData, setBuyData] = useState([
     {
@@ -56,6 +53,10 @@ const Buy = () => {
     setStarStates(updatedStarStates);
   };
 
+  useEffect(() => {
+    fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
+  }, [])
+
   return (
     <>
       <div className="table-responsive dashboard-table">
@@ -98,9 +99,10 @@ const Buy = () => {
                     onClick={() => handleStarClick(index)}
                   ></div>
                   {item.id}
-                  {item.token.logo}
+                  {/* {item.token.logo} */}
+                  <img src={item.token.logo} alt="" width={30}/>
                   <span>{item.token.title}</span>
-                  <span className="subTitle">{item.token.subTitle}</span>
+                  <span className="subTitle">{item.token.subtitle}</span>
                 </td>
                 <td>{item.tokenPrice}</td>
                 <td>{item.tokenAmount}</td>

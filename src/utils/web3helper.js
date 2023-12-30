@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { ERC20, PierMarketplace } from './abi';
+import { tokenInfo } from './tokenList';
 
 const provider = "https://ethereum-sepolia.publicnode.com"
 
@@ -36,7 +37,19 @@ async function fetchSellTokenList() {
     const waiterList = []
     for (let i = 1; i <= waiter; i++) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
-        waiterList.push(wts)
+        const decimals = tokenInfo[wts[0]]["decimals"]
+        waiterList.push({
+            id: i,
+            token: {
+                logo: tokenInfo[wts[0]]["logo"],
+                title: tokenInfo[wts[0]]["name"],
+                subtitle: tokenInfo[wts[0]]["symbol"]
+            },
+            tokenPrice: Number(wts[3] / wts[2]) / (10 ** decimals),
+            tokenAmount: Number(wts[2]) / (10 ** decimals),
+            totalPrice: Number(wts[3]) / (10 ** decimals),
+            seler: wts[1],
+        })
     }
     return waiterList;
 }
