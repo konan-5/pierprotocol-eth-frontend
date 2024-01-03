@@ -38,6 +38,7 @@ async function fetchSellTokenList() {
     for (let i = 1; i <= waiter; i++) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
         const decimals = tokenInfo[wts[0]]["decimals"]
+        const seller = `${wts[1]}`
         waiterList.push({
             id: i,
             token: {
@@ -45,10 +46,10 @@ async function fetchSellTokenList() {
                 title: tokenInfo[wts[0]]["name"],
                 subtitle: tokenInfo[wts[0]]["symbol"]
             },
-            tokenPrice: Number(wts[3] / wts[2]) / (10 ** decimals),
+            tokenPrice: parseFloat(((Number(wts[3]) / (10 ** 18)) / (Number(wts[2]) / (10 ** decimals))).toFixed(8)),
             tokenAmount: Number(wts[2]) / (10 ** decimals),
             totalPrice: Number(wts[3]) / (10 ** decimals),
-            seler: wts[1],
+            seller: `${seller.substring(0, 5)}...${seller.substring(seller.length - 5)}`,
         })
     }
     return waiterList;

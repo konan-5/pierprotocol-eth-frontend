@@ -4,23 +4,23 @@ import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
 import { fetchSellTokenList } from "@/utils/web3helper";
 
+// {
+//   id: 7,
+//   token: {
+//     logo: <Image src={Bitcoin} alt="" />,
+//     title: "Bitcoin",
+//     subTitle: "BTC",
+//   },
+//   tokenPrice: "34.844$",
+//   tokenAmount: "62,749.00",
+//   totalPrice: "57,600.00",
+//   seller: "0xffjeeedv",
+// },
+
 const Buy = () => {
   const [sellTokenList, setSellTokenList] = useState([])
   const [order, setOrder] = useState("ASC");
-  const [buyData, setBuyData] = useState([
-    {
-      id: 7,
-      token: {
-        logo: <Image src={Bitcoin} alt="" />,
-        title: "Bitcoin",
-        subTitle: "BTC",
-      },
-      tokenPrice: "34.844$",
-      tokenAmount: "62,749.00",
-      totalPrice: "57,600.00",
-      seller: "0xffjeeedv",
-    },
-  ]);
+  const [buyData, setBuyData] = useState([]);
 
   const sorting = (col) => {
     const sortedData = [...buyData].sort((a, b) => {
