@@ -887,7 +887,7 @@ body {
 
 .dashboard-tabs {
   border-radius: 20px;
-  background: #18191d;
+//   background: #18191d;
   overflow: hidden;
   font-family: "DM Sans", sans-serif;
 
@@ -968,7 +968,11 @@ body {
 }
 
 .dashboard-table {
-  padding: 30px 30px;
+//   background: #18191d;
+border-radius: 20px;
+    // top: 200px;
+    margin-top: 20px;
+    padding: 30px 30px;
 
   .table > :not(caption) > * > * {
     background: none;

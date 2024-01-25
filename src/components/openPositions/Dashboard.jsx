@@ -80,7 +80,9 @@ const Dashboard = () => {
                   <Tab.Pane eventKey="first">
                     <Buy />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="third">{/* <Activity /> */}</Tab.Pane>
+                  <Tab.Pane eventKey="third">
+                    <Activity />
+                  </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
             </div>
