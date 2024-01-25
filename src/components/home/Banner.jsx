@@ -1,8 +1,13 @@
 import Image from "next/image";
-import EthereumIcon from "../../assets/images/ethereum-logo.png"
-import MetamaskIcon from "../../assets/images/metamask-logo.png"
-import SolidityIcon from "../../assets/images/solidity-logo.png"
-import UniswapIcon from "../../assets/images/uniswap-logo.png"
+// import EthereumIcon from "../../assets/images/ethereum-logo.png"
+// import MetamaskIcon from "../../assets/images/metamask-logo.png"
+// import SolidityIcon from "../../assets/images/solidity-logo.png"
+// import UniswapIcon from "../../assets/images/uniswap-logo.png"
+import promoImage1 from '../../assets/images/promo-1.png'
+import promoImage2 from '../../assets/images/promo-2.png'
+import promoImage3 from '../../assets/images/promo-3.png'
+import promoImage4 from '../../assets/images/promo-4.png'
+import promoImage5 from '../../assets/images/promo-5.png'
 import Link from "next/link";
 
 const Banner = () => {
@@ -14,9 +19,7 @@ const Banner = () => {
             <div className="banner-text">
               <div className="fs-80 text-g">Pier Protocol</div>
               <p>
-                Discover a groundbreaking peer-to-peer experience, blending
-                technology seamlessly for innovative collaboration and
-                meaningful connections that transcend boundaries.
+                A cutting-edge multi-chain peer-to-peer protocol, transforming digital asset exchange with unmatched security and speed across diverse blockchains.
               </p>
               <div className="d-flex justify-content-center gap-4">
                 <Link className="btn-lg btn-gray" href="/dashboard">LAUNCH APP</Link>
@@ -41,14 +44,14 @@ const Banner = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="promo-area">
-              <div className="promo-title fs-20 fw-semibold text-center">
-                POWERING TOOLS AND INTEGRATIONS FROM COMPANIES ALL AROUND THE
-                WORLD
+              <div className="fs-36 fw-semibold text-center">
+                Powering tools and integrations from companies
+                all around the world
               </div>
               <div className="promo-content">
                 {promoData.map((item, index) => (
                   <div className="promo-item" key={index}>
-                    <Image src={item.src} alt={item.alt} height={60}/>
+                    <Image src={item.src} alt={item.alt} height={60} />
                   </div>
                 ))}
               </div>
@@ -63,8 +66,9 @@ const Banner = () => {
 export default Banner;
 
 const promoData = [
-  { src: EthereumIcon,alt :"Ethereum" },
-  { src: MetamaskIcon,alt :"Metamask" },
-  { src: SolidityIcon,alt :"Solidity" },
-  { src: UniswapIcon,alt :"Uniswap" },
+  { src: promoImage1, alt: "Image" },
+  { src: promoImage2, alt: "Image" },
+  { src: promoImage3, alt: "Image" },
+  { src: promoImage4, alt: "Image" },
+  { src: promoImage5, alt: "Image" },
 ];
