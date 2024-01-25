@@ -60,8 +60,17 @@ const Buy = () => {
 
   return (
     <>
-      <div className="table-responsive dashboard-table">
-        <Card />        
+      <div className="buy-board">
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
       </div>
     </>
   );
