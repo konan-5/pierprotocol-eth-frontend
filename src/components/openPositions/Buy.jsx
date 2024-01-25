@@ -18,7 +18,7 @@ import { fetchSellTokenList } from "@/utils/web3helper";
 // },
 
 const Buy = () => {
-  const [sellTokenList, setSellTokenList] = useState([])
+  // const [sellTokenList, setSellTokenList] = useState([])
   const [order, setOrder] = useState("ASC");
   const [buyData, setBuyData] = useState([]);
 
@@ -44,18 +44,18 @@ const Buy = () => {
     setOrder(order === "ASC" ? "DSC" : "ASC");
   };
 
-  const [starStates, setStarStates] = useState(
-    Array(buyData.length).fill(false)
-  );
-  const handleStarClick = (index) => {
-    const updatedStarStates = [...starStates];
-    updatedStarStates[index] = !updatedStarStates[index];
-    setStarStates(updatedStarStates);
-  };
+  // const [starStates, setStarStates] = useState(
+  //   Array(buyData.length).fill(false)
+  // );
+  // const handleStarClick = (index) => {
+  //   const updatedStarStates = [...starStates];
+  //   updatedStarStates[index] = !updatedStarStates[index];
+  //   setStarStates(updatedStarStates);
+  // };
 
-  useEffect(() => {
-    fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
-  }, [])
+  // useEffect(() => {
+  //   fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
+  // }, [])
 
   return (
     <>
@@ -96,7 +96,7 @@ const Buy = () => {
                   <div
                     className={`star-icon ${starStates[index] ? "start-button" : ""
                       }`}
-                    onClick={() => handleStarClick(index)}
+                    // onClick={() => handleStarClick(index)}
                   ></div>
                   {item.id}
                   {/* {item.token.logo} */}
