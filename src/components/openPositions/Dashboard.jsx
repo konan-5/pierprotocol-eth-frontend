@@ -15,6 +15,17 @@ const Dashboard = () => {
                         <div className="dashboard-tabs">
                             <Tab.Container defaultActiveKey="first">
                                 <div className="tabs-nav">
+                                    <Nav variant="pills">
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="first">BUY</Nav.Link>
+                                        </Nav.Item>
+                                        {/* <Nav.Item>
+                      <Nav.Link eventKey="second">SELL</Nav.Link>
+                    </Nav.Item> */}
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="third">Activity</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
                                     <div className="search">
                                         <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_401_8554)">
@@ -28,19 +39,8 @@ const Dashboard = () => {
                                         </svg>
                                         <input placeholder="Enter token name or mint address" />
                                     </div>
-                                    <Nav variant="pills">
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="first">BUY</Nav.Link>
-                                        </Nav.Item>
-                                        {/* <Nav.Item>
-                      <Nav.Link eventKey="second">SELL</Nav.Link>
-                    </Nav.Item> */}
-                                        <Nav.Item>
-                                            <Nav.Link eventKey="third">Activity</Nav.Link>
-                                        </Nav.Item>
-                                    </Nav>
                                     <div className="ml-lg-auto">
-                                        <Link href={"/create-offer"} className="btn-lg">
+                                        <Link href={"/create-offer"} className="btn-lg create-offer">
                                             <span>CREATE OFFER</span>
                                             <svg
                                                 width="24"

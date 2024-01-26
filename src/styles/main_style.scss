@@ -35,14 +35,15 @@ body {
     font-weight: 500;
     transition: all 0.3s;
     border-radius: 30px;
+    text-align: center;
 
     @media (max-width: 575.98px) {
         font-size: 17px;
-        padding: 0 20px;
+        // padding: 0 20px;
     }
 
     span {
-        margin-right: 15px;
+        // margin-right: 15px;
     }
 
     //   &:hover {
@@ -904,19 +905,23 @@ body {
         justify-content: space-between;
         padding: 0 20px;
 
-        @media (max-width: 625px) {
-            display: grid;
-            gap: 10px;
-            justify-content: center;
-            text-align: center;
+        // @media (max-width: 625px) {
+        //     display: grid;
+        //     gap: 10px;
+        //     justify-content: center;
+        //     text-align: center;
+        // }
+
+        @media (max-width: 776px) {
+            flex-direction: column;
         }
 
         .search {
-            position: absolute;
+            // position: absolute;
             display: flex;
             left: 50%;
             font-size: 14px;
-            transform: translateX(-50%);
+            // transform: translateX(-50%);
             border-radius: 50.6px;
             border: 1.1px solid rgba(207, 207, 207, 0.15);
             background: rgba(255, 255, 255, 0.1);
@@ -936,6 +941,10 @@ body {
             gap: 10px;
         }
 
+        .create-offer span {
+            margin-right: 5px;
+        }
+
         .nav-link {
             font-size: 16px;
             font-style: normal;
@@ -951,9 +960,9 @@ body {
             border-radius: 100px;
             justify-content: space-around;
 
-            @media (max-width: 625px) {
-                padding: 0 0px;
-            }
+            // @media (max-width: 625px) {
+            //     padding: 0 0px;
+            // }
 
             &.active {
                 background: var(--buttons,
@@ -1405,8 +1414,12 @@ body {
         .token-info,
         .price-setting {
             padding: 30px 100px;
+            @media (max-width: 615px) {
+                padding: 30px 10px;
+            }
         }
 
+    
         .token-info {
             display: flex;
             justify-content: space-between;
@@ -1480,7 +1493,15 @@ body {
                     margin: 20px 0;
                 }
 
-                .value-setting {}
+                .value-setting {
+                    display: flex;
+                    .value {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-evenly;
+                        gap: 10px;
+                    }
+                }
             }
         }
     }
