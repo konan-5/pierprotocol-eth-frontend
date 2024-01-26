@@ -6,7 +6,7 @@ import ProgressBar from '@/components/buy/ProgressiveBar'
 
 export default function Buy() {
 
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(50);
 
     const handleProgressChange = (newValue) => {
         setValue(newValue);
