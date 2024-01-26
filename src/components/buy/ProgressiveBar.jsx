@@ -38,6 +38,7 @@ function ProgressBar({ max, onChange }) {
     return (
         <div className="progress-bar" ref={progressBarRef}>
             <div className="progress-bar-filled" style={{ width }} />
+            <div className="progress-bar-unfilled" style={{ width:  (1 - (progress / max)) * 100 + "%"}} />
             <div
                 className="progress-bar-handle"
                 style={{ left: width }}
