@@ -40,7 +40,7 @@ const Dashboard = () => {
                                         </Nav.Item>
                                     </Nav>
                                     <div className="ml-lg-auto">
-                                        <Link href={"/list"} className="btn-lg">
+                                        <Link href={"/create-offer"} className="btn-lg">
                                             <span>CREATE OFFER</span>
                                             <svg
                                                 width="24"
