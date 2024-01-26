@@ -1348,3 +1348,72 @@ body {
     }
 }
 
+.buy {
+    max-width: 860px;
+    margin: auto;
+    margin-top: 50px;
+    .back-to-market {
+        color: rgba(255, 255, 255, 0.20);
+        svg {
+            margin-right: 20px;
+        }
+    }
+    .body {
+        background-color: rgba(255, 255, 255, 0.12);
+        margin-top: 20px;
+        border-radius: 10px;
+        .token-info, .price-setting {
+            padding: 30px 100px;
+        }
+        .token-info {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(254, 254, 254, 0.10);
+            .symbol {
+                display: flex;
+                .name-and-address {
+                    width: 100px;
+                    margin-left: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    .no {
+                        font-size: 12px;
+                        direction: rtl;
+                    }
+                    .name {
+                        font-size: 20px;
+                    }
+                    .address {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        background-color: rgba(242, 242, 242, 0.05);
+                        padding: 5px 8px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
+        .price-setting {
+            .prices {
+                display: flex;
+                padding: 0 50px;
+                justify-content: space-between;
+                .offer, .for, .price {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    align-items: center;
+                    text-align: center;
+                    :nth-child(3) {
+                        font-size: 15px;
+                        color: rgba(255, 255, 255, 0.50);
+                    }
+                }
+            }
+        }
+    }
+}
+
