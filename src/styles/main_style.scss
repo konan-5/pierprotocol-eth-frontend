@@ -21,7 +21,7 @@ body {
     max-width: 1380px;
 }
 
-.btn-lg {
+.banner-btn-lg, .btn-lg {
     //   background: linear-gradient(270deg, #5200FF -13.53%, #58ADFE 116.45%);
     color: var(--white);
     border-radius: 12px;
@@ -29,10 +29,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 30px;
+    padding: 10px 15px;
     font-size: 18px;
     font-weight: 500;
     transition: all 0.3s;
+    border-radius:30px;
 
     @media (max-width: 575.98px) {
         font-size: 17px;
@@ -47,10 +48,24 @@ body {
     //       background: linear-gradient(270deg, #58ADFE -13.53%, #5200FF 116.45%);
     //   }
 
-    //   &.btn-gray {
-    //     border: 1px solid rgba(255, 255, 255, 0.2);
-    //     background: rgba(126, 126, 126, 0.29) !important;
-    //   }
+}
+
+.banner-btn-lg {
+    background: linear-gradient(270deg, #5200FF -13.53%, #58ADFE 116.45%);
+    backdrop-filter: blur(10px);
+    padding: 15px 20px;
+    border-radius: 50px;
+}
+
+.btn-lg, .banner-btn-lg, .buy-board .card button, .nav-link {
+    &:hover {
+        background: linear-gradient(271deg, #58adfe -12.47%, #5200ff 96.73%);
+    }
+}
+
+.btn-gray {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(126, 126, 126, 0.29) !important;
 }
 
 .fs-80 {
@@ -1034,7 +1049,7 @@ body {
 
 .dashboard-table {
     //   background: #18191d;
-    background-color: rgba(255, 255, 255, 0.15);
+    // background-color: rgba(255, 255, 255, 0.15);
     border-radius: 20px;
     // top: 200px;
     margin-top: 20px;
@@ -1065,24 +1080,14 @@ body {
 
     .table {
         margin-bottom: 0;
-
-        .table-group-divider {
-            border: 0;
-            position: relative;
-
-            &::before {
-                content: "";
-                position: absolute;
-                left: 0;
-                top: -10px;
-                border-top: 1px solid #777e90;
-                width: 100%;
-            }
+        border: none;
+        thead {
+            background-color: rgba(255, 255, 255, 0.15);
         }
 
         th {
             font-size: 20px;
-            padding-bottom: 35px;
+            // padding-bottom: 35px;
 
             &:first-child {
                 padding-left: 40px;
@@ -1105,24 +1110,6 @@ body {
                 padding: 0;
                 width: 180px;
             }
-        }
-
-        .btn-sell,
-        .btn-buy {
-            display: flex;
-            width: 188px;
-            padding: 12px 16px;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            border-radius: 90px;
-            border: 2px solid #24fe00;
-            box-shadow: 0px 0px 10px 0px #23e204;
-        }
-
-        .btn-sell {
-            border: 2px solid #ae3136;
-            box-shadow: 0px 0px 10px 0px #fe0001;
         }
 
         .btn-completed {

@@ -155,7 +155,7 @@ const Activity = () => {
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody className="table-group-divider">
+                    <tbody>
                         {buyData.map((item, index) => (
                             <tr key={item.id}>
                                 <td className="table-title">
