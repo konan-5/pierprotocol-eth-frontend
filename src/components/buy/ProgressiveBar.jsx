@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 
-function ProgressBar({ max, onChange }) {
-    const [progress, setProgress] = useState(0);
+function ProgressBar({ max, value, setValue, onChange }) {
+    // const [progress, setProgress] = useState(0);
     const progressBarRef = useRef(null);
 
     const getProgressFromMouseEvent = useCallback(
@@ -22,7 +22,7 @@ function ProgressBar({ max, onChange }) {
     const handleMouseMove = useCallback(
         (event) => {
             const newProgress = getProgressFromMouseEvent(event);
-            setProgress(newProgress);
+            setValue(newProgress);
             onChange(newProgress);
         },
         [getProgressFromMouseEvent, onChange]
@@ -33,12 +33,12 @@ function ProgressBar({ max, onChange }) {
         document.removeEventListener("mouseup", handleMouseUp);
     };
 
-    const width = (progress / max) * 100 + "%";
+    const width = (value / max) * 100 + "%";
 
     return (
         <div className="progress-bar" ref={progressBarRef}>
             <div className="progress-bar-filled" style={{ width }} />
-            <div className="progress-bar-unfilled" style={{ width:  (1 - (progress / max)) * 100 + "%"}} />
+            <div className="progress-bar-unfilled" style={{ width:  (1 - (value / max)) * 100 + "%"}} />
             <div
                 className="progress-bar-handle"
                 style={{ left: width }}
