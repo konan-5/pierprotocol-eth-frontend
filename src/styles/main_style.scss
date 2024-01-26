@@ -21,7 +21,8 @@ body {
     max-width: 1380px;
 }
 
-.banner-btn-lg, .btn-lg {
+.banner-btn-lg,
+.btn-lg {
     //   background: linear-gradient(270deg, #5200FF -13.53%, #58ADFE 116.45%);
     color: var(--white);
     border-radius: 12px;
@@ -33,7 +34,7 @@ body {
     font-size: 18px;
     font-weight: 500;
     transition: all 0.3s;
-    border-radius:30px;
+    border-radius: 30px;
 
     @media (max-width: 575.98px) {
         font-size: 17px;
@@ -57,7 +58,10 @@ body {
     border-radius: 50px;
 }
 
-.btn-lg, .banner-btn-lg, .buy-board .card button, .nav-link {
+.btn-lg,
+.banner-btn-lg,
+.buy-board .card button,
+.nav-link {
     &:hover {
         background: linear-gradient(271deg, #58adfe -12.47%, #5200ff 96.73%);
     }
@@ -1081,6 +1085,7 @@ body {
     .table {
         margin-bottom: 0;
         border: none;
+
         thead {
             background-color: rgba(255, 255, 255, 0.15);
         }
@@ -1231,11 +1236,14 @@ body {
 .create-offer {
     margin: auto;
     max-width: 700px;
-    .title, .body {
+
+    .title,
+    .body {
         width: 100%;
         background-color: rgba(255, 255, 255, 0.15);
         border-radius: 10px;
     }
+
     .title {
         padding: 20px 0;
         display: flex;
@@ -1243,38 +1251,50 @@ body {
         justify-content: center;
         gap: 10px;
         font-weight: bolder;
-    };
+    }
+
+    ;
+
     .body {
         min-height: 700px;
         margin-top: 20px;
         padding: 80px 80px;
+
         .steps {
             display: flex;
             justify-content: center;
             gap: 20px;
-            .step1, .step2 {
+
+            .step1,
+            .step2 {
                 display: flex;
                 flex-direction: column;
                 text-align: center;
                 align-items: center;
                 gap: 5px;
+
                 span {
                     color: rgba(255, 255, 255, 0.15);
                 }
             }
+
             .step-line {
                 top: 20px;
                 position: relative;
                 width: 140px;
                 height: 0px;
                 // background-color: #000;
-                border: 1px rgba(254, 254, 254, 0.10);                ;
+                border: 1px rgba(254, 254, 254, 0.10);
+                ;
                 border-bottom: 0px;
                 border-style: dashed;
             }
         }
-        .network, .token {
+
+        .network,
+        .token {
             margin-top: 50px;
+
             .description {
                 font-size: 36px;
                 width: 560px;
@@ -1283,6 +1303,7 @@ body {
                 margin-bottom: 80px;
             }
         }
+
         .network {
             .selected-network {
                 margin-top: 20px;
@@ -1290,45 +1311,58 @@ body {
                 padding: 10px;
                 border: 1px solid rgba(255, 255, 255, 0.15);
                 border-radius: 10px;
+
                 span {
                     margin-left: 20px;
                 }
             }
+
             .navigate-button {
                 margin-top: 50px;
                 // margin-bottom: 80px;
                 display: flex;
                 justify-content: space-evenly;
                 gap: 20px;
-                .back, .next {
+
+                .back,
+                .next {
                     padding: 20px;
                     width: 100%;
                     border-radius: 10px;
                 }
+
                 .back {
                     background-color: rgba(255, 255, 255, 0.12);
                 }
+
                 .next {
                     background: var(--buttons, linear-gradient(270deg, #5200ff -13.53%, #58adfe 116.44%, #7978ff 116.45%));
                 }
             }
-            .sell, .for {
+
+            .sell,
+            .for {
                 margin-top: 20px;
                 padding: 10px;
                 border: 1px solid rgba(255, 255, 255, 0.15);
                 border-radius: 10px;
+
                 .input-area {
                     display: flex;
                     justify-content: space-between;
-                    input, .token-dropdown {
+
+                    input,
+                    .token-dropdown {
                         padding: 10px 0;
                     }
+
                     input {
                         color: white;
                         padding: 0 10px;
                         width: 100%;
                         background-color: transparent;
                     }
+
                     .token-dropdown {
                         background-color: rgba(217, 217, 217, 0.05);
                         padding: 10px 25px;
@@ -1338,6 +1372,7 @@ body {
                         border: 1.1px solid rgba(255, 255, 255, 0.15);
                         border-radius: 20px;
                         cursor: pointer;
+
                         span {
                             margin-right: 15px;
                         }
@@ -1352,38 +1387,50 @@ body {
     max-width: 860px;
     margin: auto;
     margin-top: 50px;
+
     .back-to-market {
+        cursor: pointer;
         color: rgba(255, 255, 255, 0.20);
+
         svg {
             margin-right: 20px;
         }
     }
+
     .body {
         background-color: rgba(255, 255, 255, 0.12);
         margin-top: 20px;
         border-radius: 10px;
-        .token-info, .price-setting {
+
+        .token-info,
+        .price-setting {
             padding: 30px 100px;
         }
+
         .token-info {
             display: flex;
             justify-content: space-between;
             border-bottom: 1px solid rgba(254, 254, 254, 0.10);
+
             .symbol {
                 display: flex;
+
                 .name-and-address {
                     width: 100px;
                     margin-left: 20px;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-evenly;
+
                     .no {
                         font-size: 12px;
                         direction: rtl;
                     }
+
                     .name {
                         font-size: 20px;
                     }
+
                     .address {
                         display: flex;
                         align-items: center;
@@ -1396,24 +1443,71 @@ body {
                 }
             }
         }
+
         .price-setting {
             .prices {
                 display: flex;
-                padding: 0 50px;
+                padding: 0 20px;
                 justify-content: space-between;
-                .offer, .for, .price {
+
+                .offer,
+                .for,
+                .price {
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
                     align-items: center;
                     text-align: center;
+
                     :nth-child(3) {
                         font-size: 15px;
                         color: rgba(255, 255, 255, 0.50);
                     }
                 }
             }
+
+            .buy {
+                padding: 20px;
+                border-radius: 16.5px;
+                border: 1.1px solid rgba(255, 255, 255, 0.15);
+
+                .description {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .amount {
+                    margin: 20px 0;
+                }
+
+                .value-setting {
+                    .progress-bar {
+                        width: 100%;
+                        background: #111;
+                        border-radius: 10px;
+                        position: relative;
+                    }
+
+                    .progress-bar-filled {
+                        height: 10px;
+                        background: linear-gradient(to right, #4e54c8, #8f94fb);
+                        border-radius: 10px;
+                        // transition: width 0.4s ease-in-out;
+                    }
+
+                    .progress-bar-handle {
+                        position: absolute;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 20px;
+                        height: 20px;
+                        background: #fff;
+                        border: 3px solid #4e54c8;
+                        border-radius: 50%;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
     }
 }
-

@@ -1,6 +1,8 @@
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Card = () => {
+    const router = useRouter();
     return (
         <div className="card">
             <div className="summary">
@@ -41,7 +43,7 @@ const Card = () => {
                 </div>
             </div>
 
-            <button>Buy Token</button>
+            <button onClick={() => router.push('/buy')}>Buy Token</button>
         </div>
     );
 };

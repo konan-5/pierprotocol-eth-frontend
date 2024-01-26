@@ -1,9 +1,18 @@
 import OtherHeader from '@/components/global/OtherHeader'
 import Head from 'next/head'
-import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import ProgressBar from '@/components/buy/ProgressiveBar'
 
 export default function Buy() {
 
+    const [value, setValue] = useState(0);
+
+    const handleProgressChange = (newValue) => {
+      setValue(newValue);
+    };
+
+    const router = useRouter();
     useEffect(() => {
     }, [])
     return (
@@ -14,7 +23,7 @@ export default function Buy() {
             <main id="other-wrapper" className='list-wrapper'>
                 <OtherHeader />
                 <div className='buy'>
-                    <div className='back-to-market'>
+                    <div className='back-to-market' onClick={() => router.push('/dashboard')}>
                         <svg width="7" height="11" viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 1L1 5.5L6 10" stroke="#FEFEFE" stroke-opacity="0.2" stroke-linecap="round" />
                         </svg>
@@ -101,6 +110,21 @@ export default function Buy() {
                                     <span>Price / Token</span>
                                 </div>
                             </div>
+                            <div className='buy'>
+                                <div className='description'>
+                                    <span>BUY AMOUNT</span>
+                                    <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="13.5" cy="13.5" r="13.5" fill="#D9D9D9" />
+                                    </svg>
+                                </div>
+                                <div className='amount'>
+                                    4578264
+                                </div>
+                                <div className='value-setting'>
+                                    <ProgressBar max={100} value={value} onChange={handleProgressChange} />
+                                </div>
+                            </div>
+                            <div className='pay'></div>
                         </div>
                     </div>
                 </div>
