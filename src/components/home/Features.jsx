@@ -14,7 +14,7 @@ const Features = () => {
                 <div className="features-item" key={item.id}>
                   <div className="icon">{item.icon}</div>
                   <div className="fs-40 fw-bold title">{item.title}</div>
-                  <p>{item.text}</p>
+                  <p className="fs-10">{item.text}</p>
                 </div>
               ))}
             </div>

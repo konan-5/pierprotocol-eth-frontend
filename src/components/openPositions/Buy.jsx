@@ -3,6 +3,7 @@ import Bitcoin from "../../assets/images/bitcoin-ic.svg";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
 import { fetchSellTokenList } from "@/utils/web3helper";
+import Card from "./Card";
 
 // {
 //   id: 7,
@@ -18,7 +19,7 @@ import { fetchSellTokenList } from "@/utils/web3helper";
 // },
 
 const Buy = () => {
-  const [sellTokenList, setSellTokenList] = useState([])
+  // const [sellTokenList, setSellTokenList] = useState([])
   const [order, setOrder] = useState("ASC");
   const [buyData, setBuyData] = useState([]);
 
@@ -44,77 +45,26 @@ const Buy = () => {
     setOrder(order === "ASC" ? "DSC" : "ASC");
   };
 
-  const [starStates, setStarStates] = useState(
-    Array(buyData.length).fill(false)
-  );
-  const handleStarClick = (index) => {
-    const updatedStarStates = [...starStates];
-    updatedStarStates[index] = !updatedStarStates[index];
-    setStarStates(updatedStarStates);
-  };
+  // const [starStates, setStarStates] = useState(
+  //   Array(buyData.length).fill(false)
+  // );
+  // const handleStarClick = (index) => {
+  //   const updatedStarStates = [...starStates];
+  //   updatedStarStates[index] = !updatedStarStates[index];
+  //   setStarStates(updatedStarStates);
+  // };
 
-  useEffect(() => {
-    fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
-  }, [])
+  // useEffect(() => {
+  //   fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
+  // }, [])
 
   return (
     <>
-      <div className="table-responsive dashboard-table">
-        <table className="table">
-          <thead>
-            <tr>
-              <th
-                scope="col"
-                className="cursor"
-                onClick={() => sorting("token.title")}
-              >
-                # Token <PiCaretUpDownFill />
-              </th>
-              <th
-                scope="col"
-                className="cursor"
-                onClick={() => sorting("tokenPrice")}
-              >
-                Price per Token <PiCaretUpDownFill />
-              </th>
-              <th
-                scope="col"
-                className="cursor"
-                onClick={() => sorting("tokenAmount")}
-              >
-                Token Amount <PiCaretUpDownFill />
-              </th>
-              <th scope="col">Total Price</th>
-              <th scope="col">Seller</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody className="table-group-divider">
-            {buyData.map((item, index) => (
-              <tr key={item.id}>
-                <td className="table-title">
-                  <div
-                    className={`star-icon ${starStates[index] ? "start-button" : ""
-                      }`}
-                    onClick={() => handleStarClick(index)}
-                  ></div>
-                  {item.id}
-                  {/* {item.token.logo} */}
-                  <img src={item.token.logo} alt="" width={30}/>
-                  <span>{item.token.title}</span>
-                  <span className="subTitle">{item.token.subtitle}</span>
-                </td>
-                <td>{item.tokenPrice}</td>
-                <td>{item.tokenAmount}</td>
-                <td>{item.totalPrice}</td>
-                <td className="seller-text">{item.seller}</td>
-                <td>
-                  <button className="btn-buy">Buy</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="buy-board">
+        <Card />
+        <Card />
+        <Card />
+        <Card />
       </div>
     </>
   );
