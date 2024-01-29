@@ -19,10 +19,10 @@ const Footer = () => {
                             <div className="footer-nav">
                                 <Link href="#features">Key Features</Link>
                                 <Link href="#faq">Faq</Link>
-                                <Link href="#" onClick={() => {window.location.assign(" https://pier-protocol.gitbook.io/pier-protocol/")}}>Gitbook</Link>
+                                <Link href="https://pier-protocol.gitbook.io/pier-protocol/" >Gitbook</Link>
                             </div>
                             <div className="footer-social">
-                                <Link href=""><TwitterIcon/></Link>
+                                <Link href="https://twitter.com/protocolpier"><TwitterIcon/></Link>
                                 <Link href=""><DiscordIcon/></Link>
                                 <Link href=""><EvenoddIcon/></Link>
                             </div>

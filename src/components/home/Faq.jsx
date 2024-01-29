@@ -34,8 +34,8 @@ const faqData = [
   },
   {
     id: 1,
-    title: "Is Pier Protocol Secure?",
-    desc: "Yes, Pier employs robust security protocols inherent in the Ethereum blockchain, along with additional measures",
+    title: "Why multiple chains for this project?",
+    desc: "The decision to adopt a multichain approach is driven by our commitment to inclusivity, flexibility, and resilience. By operating across multiple chains, our protocol ensures wider accessibility, enhanced security and optimized performance.",
   },
   {
     id: 2,

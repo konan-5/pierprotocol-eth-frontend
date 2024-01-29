@@ -31,19 +31,19 @@ const featureData = [
   {
     id: 1,
     icon: <Speed />,
-    title: "High-Speed Transactions",
-    text: "Utilizing Ethereum's advanced blockchain, our protocol ensures rapid transaction processing, far exceeding traditional speeds.",
+    title: "Multi-Chain Infrastructure",
+    text: "Each blockchain has unique attributes; by leveraging their individual strengths, our protocol optimizes performance and efficiency.",
   },
   {
-    id: 1,
+    id: 2,
     icon: <Security />,
     title: "Enhanced Security",
     text: "With a direct peer-to-peer approach, our protocol maximizes security, fostering trust and reliability in every interaction.",
   },
   {
-    id: 1,
+    id: 3,
     icon: <Integration />,
     title: "Smart Contract Integration",
-    text: "Our smart contracts, optimized for Ethereum, enable a wide range of applications, all benefiting from peer-to-peer efficiency.",
+    text: "Our smart contract, optimized for multi-chains, enabling a wide range of applications, all benefiting from peer-to-peer efficiency",
   },
 ];
