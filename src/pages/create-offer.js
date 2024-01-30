@@ -2,7 +2,7 @@ import OtherHeader from '@/components/global/OtherHeader'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
-import { networks } from '@/utils/svg';
+import { networkSvgs } from '@/utils/svg';
 
 export default function CreateOffer() {
     const router = useRouter();
@@ -11,7 +11,7 @@ export default function CreateOffer() {
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const networks = ['Ethereum', 'Bsc', 'Polygon', 'Solana']; // Example networks
+    const networks = ['Ethereum', 'Sei', 'Solana']; // Example networks
 
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleClickOutside = (event) => {
@@ -97,16 +97,21 @@ export default function CreateOffer() {
                                     <div>
                                         Network
                                     </div>
-                                    <div ref={dropdownRef}>
+                                    <div ref={dropdownRef} className='select-network'>
                                         <div className='selected-network' onClick={toggleDropdown}>
-                                            {networks[selectedNetwork]}
+                                            <div className='logo'>
+                                                {networkSvgs[selectedNetwork]}
+                                            </div>
                                             <span>{selectedNetwork}</span>
                                         </div>
                                         {isOpen && (
                                             <ul>
                                                 {networks.map(network => (
-                                                    <li key={network} onClick={() => { setIsOpen(false); console.log(`Selected ${network}`); }}>
-                                                        {network}
+                                                    <li key={network} onClick={() => { setIsOpen(false); setSelectedNetwork(network); }}>
+                                                        <div className='logo'>
+                                                            {networkSvgs[network]}
+                                                        </div>
+                                                        <span>{network}</span>
                                                     </li>
                                                 ))}
                                             </ul>
