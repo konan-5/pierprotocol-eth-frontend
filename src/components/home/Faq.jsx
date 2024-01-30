@@ -34,7 +34,7 @@ const faqData = [
   },
   {
     id: 1,
-    title: "Why multiple chains for this project?",
+    title: "Why Multi-Chain?",
     desc: "The decision to adopt a multichain approach is driven by our commitment to inclusivity, flexibility, and resilience. By operating across multiple chains, our protocol ensures wider accessibility, enhanced security and optimized performance.",
   },
   {
