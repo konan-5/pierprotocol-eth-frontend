@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
 import { networkSvgs } from '@/utils/svg';
-// import { tokens } from '@/utils/tokens';
 import { tokenInfos } from '@/utils/tokenList';
 
 export default function CreateOffer() {
@@ -177,10 +176,10 @@ export default function CreateOffer() {
                                                 {isCellingTokenOpen && (
                                                     <ul>
                                                         {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                            <li key={tokenInfo.symbol} onClick={() => { 
-                                                                setIsCellingTokenOpen(false); 
-                                                                setCellingToken(tokenInfo.symbol); 
-                                                                if(forToken == tokenInfo.symbol) {
+                                                            <li key={tokenInfo.symbol} onClick={() => {
+                                                                setIsCellingTokenOpen(false);
+                                                                setCellingToken(tokenInfo.symbol);
+                                                                if (forToken == tokenInfo.symbol) {
                                                                     setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                                 }
                                                             }}>
@@ -212,10 +211,10 @@ export default function CreateOffer() {
                                                     {isForTokenOpen && (
                                                         <ul>
                                                             {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                                <li key={tokenInfo.symbol} onClick={() => { 
-                                                                    setIsForTokenOpen(false); 
-                                                                    setForToken(tokenInfo.symbol); 
-                                                                    if(cellingToken == tokenInfo.symbol) {
+                                                                <li key={tokenInfo.symbol} onClick={() => {
+                                                                    setIsForTokenOpen(false);
+                                                                    setForToken(tokenInfo.symbol);
+                                                                    if (cellingToken == tokenInfo.symbol) {
                                                                         setCellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                                     }
                                                                 }}>
