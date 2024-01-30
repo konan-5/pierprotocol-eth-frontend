@@ -166,7 +166,7 @@ export default function CreateOffer() {
                                     <div className='sell'>
                                         <div className='label'>Selling</div>
                                         <div className='input-area'>
-                                            <input placeholder='Enter amount' onChange={(e) => setSellingToken(e.target.value)} type='number' value={sellTokenAmount} />
+                                            <input placeholder='Enter amount' onChange={(e) => setSellTokenAmount(e.target.value)} type='number' value={sellTokenAmount} />
                                             <div className='selling-dropdown' ref={sellingTokenDropdownRef}>
                                                 <div className='token-dropdown' onClick={sellingTokenToggleDropdown}>
                                                     <span>
