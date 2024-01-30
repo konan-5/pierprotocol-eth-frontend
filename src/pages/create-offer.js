@@ -3,22 +3,47 @@ import Head from 'next/head'
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
 import { networkSvgs } from '@/utils/svg';
+import { tokens } from '@/utils/tokens';
 
 export default function CreateOffer() {
     const router = useRouter();
     const [tabStatus, setTabStatus] = useState('network');
-    const [selectedNetwork, setSelectedNetwork] = useState('Solana');
+    const [network, setNetwork] = useState('Solana');
 
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [cellingToken, setCellingToken] = useState(tokens[network][0]);
+    const [forToken, setForToken] = useState(tokens[network][0]);
+
+    const [isNetworkOpen, setIsNetworkOpen] = useState(false);
+    const networkDropdownRef = useRef(null);
+
+    const [isCellingTokenOpen, setIsCellingTokenOpen] = useState(false);
+    const cellingTokenDropdownRef = useRef(null);
+
+    const [isForTokenOpen, setIsForTokenOpen] = useState(false);
+    const forTokenDropdownRef = useRef(null);
+
     const networks = ['Ethereum', 'Sei', 'Solana']; // Example networks
 
-    const toggleDropdown = () => setIsOpen(!isOpen);
+    const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
+    const cellingTokenToggleDropdown = () => setIsCellingTokenOpen(!isCellingTokenOpen);
+    const forTokenToggleDropdown = () => setIsForTokenOpen(!isForTokenOpen);
+
     const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setIsOpen(false);
+        if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target)) {
+            setIsNetworkOpen(false);
+        }
+        if (cellingTokenDropdownRef.current && !cellingTokenDropdownRef.current.contains(event.target)) {
+            setIsCellingTokenOpen(false);
+        }
+        if (forTokenDropdownRef.current && !forTokenDropdownRef.current.contains(event.target)) {
+            setIsForTokenOpen(false);
         }
     };
+
+    useEffect(() => {
+        setCellingToken(tokens[network][0])
+        setForToken(tokens[network][1])
+    }, [network])
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -97,17 +122,17 @@ export default function CreateOffer() {
                                     <div>
                                         Network
                                     </div>
-                                    <div ref={dropdownRef} className='select-network'>
-                                        <div className='selected-network' onClick={toggleDropdown}>
+                                    <div ref={networkDropdownRef} className='select-network'>
+                                        <div className='selected-network' onClick={networkToggleDropdown}>
                                             <div className='logo'>
-                                                {networkSvgs[selectedNetwork]}
+                                                {networkSvgs[network]}
                                             </div>
-                                            <span>{selectedNetwork}</span>
+                                            <span>{network}</span>
                                         </div>
-                                        {isOpen && (
+                                        {isNetworkOpen && (
                                             <ul>
                                                 {networks.map(network => (
-                                                    <li key={network} onClick={() => { setIsOpen(false); setSelectedNetwork(network); }}>
+                                                    <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); }}>
                                                         <div className='logo'>
                                                             {networkSvgs[network]}
                                                         </div>
@@ -136,14 +161,33 @@ export default function CreateOffer() {
                                         <div className='label'>Selling</div>
                                         <div className='input-area'>
                                             <input placeholder='Enter amount' />
-                                            <div className='token-dropdown'>
-                                                <span>
-                                                    Select Token
-                                                </span>
-                                                <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
-                                                </svg>
-
+                                            <div className='selling-dropdown' ref={cellingTokenDropdownRef}>
+                                                <div className='token-dropdown' onClick={cellingTokenToggleDropdown}>
+                                                    <span>
+                                                        {cellingToken}
+                                                    </span>
+                                                    <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
+                                                    </svg>
+                                                </div>
+                                                {isCellingTokenOpen && (
+                                                    <ul>
+                                                        {tokens[network].map(token => (
+                                                            <li key={token} onClick={() => { 
+                                                                setIsCellingTokenOpen(false); 
+                                                                setCellingToken(token); 
+                                                                if(forToken == token) {
+                                                                    setForToken(tokens[network].find((item) => item != token))
+                                                                }
+                                                            }}>
+                                                                {/* <div className='logo'>
+                                                                    {networkSvgs[network]}
+                                                                </div> */}
+                                                                <span>{token}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -151,14 +195,35 @@ export default function CreateOffer() {
                                         <div className='label'>For</div>
                                         <div className='input-area'>
                                             <input placeholder='Enter amount' />
-                                            <div className='token-dropdown'>
-                                                <span>
-                                                    Select Token
-                                                </span>
-                                                <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
-                                                </svg>
-
+                                            <div className='for-dropdown'>
+                                                <div className='for-dropdown' ref={forTokenDropdownRef}>
+                                                    <div className='token-dropdown' onClick={forTokenToggleDropdown}>
+                                                        <span>
+                                                            {forToken}
+                                                        </span>
+                                                        <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
+                                                        </svg>
+                                                    </div>
+                                                    {isForTokenOpen && (
+                                                        <ul>
+                                                            {tokens[network].map(token => (
+                                                                <li key={network} onClick={() => { 
+                                                                    setIsForTokenOpen(false); 
+                                                                    setForToken(token); 
+                                                                    if(cellingToken == token) {
+                                                                        setCellingToken(tokens[network].find((item) => item != token))
+                                                                    }
+                                                                }}>
+                                                                    {/* <div className='logo'>
+                                                                        {networkSvgs[network]}
+                                                                    </div> */}
+                                                                    <span>{token}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
