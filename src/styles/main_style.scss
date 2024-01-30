@@ -579,13 +579,15 @@ body {
 
     .features-item {
         border-radius: 40px;
-        border: 2px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
         text-align: center;
-        padding: 40px 0 45px;
+        padding: 20px 30px;
         position: relative;
         z-index: 1;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+        }
 
         @media (max-width: 991.98px) {
             width: 400px;
@@ -596,34 +598,9 @@ body {
             width: 310px;
         }
 
-        &:last-child {
-            &::before {
-                display: none;
-            }
-        }
-
-        &::before {
-            content: "";
-            position: absolute;
-            right: -90px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-image: url("../assets/images/shape.svg");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: 70px;
-            height: 2px;
-            z-index: 1;
-
-            @media (max-width: 991.98px) {
-                display: none;
-            }
-        }
-
         .icon {
-            width: 120px;
-            height: 120px;
+            width: 60px;
+            height: 60px;
             background: #35343c;
             border-radius: 100px;
             display: flex;
@@ -1225,6 +1202,7 @@ body {
 .coming-soon-area {
     background: #ffffff11;
     position: absolute;
+    z-index: -10;
     top: 0;
     left: 0;
     width: 100%;
@@ -1311,6 +1289,7 @@ body {
                 text-align: center;
                 margin: auto;
                 margin-bottom: 80px;
+
                 @media (max-width: 700px) {
                     width: 100%;
                     font-size: 24px;
@@ -1420,12 +1399,13 @@ body {
         .token-info,
         .price-setting {
             padding: 30px 100px;
+
             @media (max-width: 615px) {
                 padding: 30px 10px;
             }
         }
 
-    
+
         .token-info {
             display: flex;
             justify-content: space-between;
@@ -1485,7 +1465,8 @@ body {
                 }
             }
 
-            .buy, .pay {
+            .buy,
+            .pay {
                 padding: 20px;
                 border-radius: 16.5px;
                 margin: 20px 0;
@@ -1505,12 +1486,15 @@ body {
                     .progress-bar {
                         margin-right: 10px
                     }
+
                     display: flex;
+
                     .value {
                         display: flex;
                         align-items: center;
                         justify-content: space-evenly;
                         gap: 10px;
+
                         span {
                             width: 40px;
                             color: #fff;
@@ -1518,23 +1502,27 @@ body {
                             // background-color: var(--Gradient, linear-gradient(270deg, #5200FF -13.53%, #58ADFE 116.45%));
                             // color: transparent;
                         }
+
                         svg {
                             cursor: pointer;
                         }
                     }
                 }
             }
+
             .pay {
                 .amount {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                 }
-                .value-setting{
+
+                .value-setting {
                     font-size: 12px;
                     color: rgba(255, 255, 255, 0.50);
                 }
             }
+
             button {
                 width: 100%;
                 align-items: center;

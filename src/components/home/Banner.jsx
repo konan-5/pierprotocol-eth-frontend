@@ -22,8 +22,8 @@ const Banner = () => {
                 A cutting-edge multi-chain peer-to-peer protocol, transforming digital asset exchange with unmatched security and speed across diverse blockchains.
               </p>
               <div className="d-flex justify-content-center gap-4">
-                <Link className="banner-btn-lg btn-gray" href="/dashboard">LAUNCH APP</Link>
-                <button className="banner-btn-lg">Buy $PIER</button>
+                <Link className="banner-btn-lg btn-gray" href="/coming-soon">LAUNCH APP</Link>
+                <Link className="banner-btn-lg" href="/coming-soon">Buy $PIER</Link>
               </div>
             </div>
           </div>
