@@ -3,15 +3,21 @@ import Head from 'next/head'
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react'
 import { networkSvgs } from '@/utils/svg';
-import { tokens } from '@/utils/tokens';
+// import { tokens } from '@/utils/tokens';
+import { tokenInfos } from '@/utils/tokenList';
 
 export default function CreateOffer() {
     const router = useRouter();
-    const [tabStatus, setTabStatus] = useState('network');
-    const [network, setNetwork] = useState('Solana');
 
-    const [cellingToken, setCellingToken] = useState(tokens[network][0]);
-    const [forToken, setForToken] = useState(tokens[network][0]);
+    const networks = [...new Set(tokenInfos.map(token => token.network))];
+
+    const [tabStatus, setTabStatus] = useState('network');
+    const [network, setNetwork] = useState(networks[0]);
+
+    const tokens = tokenInfos.filter((token) => token.network == network)
+
+    const [cellingToken, setCellingToken] = useState(tokens[0].symbol);
+    const [forToken, setForToken] = useState(tokens[1].symbol);
 
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
     const networkDropdownRef = useRef(null);
@@ -21,8 +27,6 @@ export default function CreateOffer() {
 
     const [isForTokenOpen, setIsForTokenOpen] = useState(false);
     const forTokenDropdownRef = useRef(null);
-
-    const networks = ['Ethereum', 'Sei', 'Solana']; // Example networks
 
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
     const cellingTokenToggleDropdown = () => setIsCellingTokenOpen(!isCellingTokenOpen);
@@ -41,8 +45,8 @@ export default function CreateOffer() {
     };
 
     useEffect(() => {
-        setCellingToken(tokens[network][0])
-        setForToken(tokens[network][1])
+        setCellingToken(tokens[0].symbol)
+        setForToken(tokens[1].symbol)
     }, [network])
 
     useEffect(() => {
@@ -172,18 +176,18 @@ export default function CreateOffer() {
                                                 </div>
                                                 {isCellingTokenOpen && (
                                                     <ul>
-                                                        {tokens[network].map(token => (
-                                                            <li key={token} onClick={() => { 
+                                                        {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
+                                                            <li key={tokenInfo.symbol} onClick={() => { 
                                                                 setIsCellingTokenOpen(false); 
-                                                                setCellingToken(token); 
-                                                                if(forToken == token) {
-                                                                    setForToken(tokens[network].find((item) => item != token))
+                                                                setCellingToken(tokenInfo.symbol); 
+                                                                if(forToken == tokenInfo.symbol) {
+                                                                    setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                                 }
                                                             }}>
                                                                 {/* <div className='logo'>
                                                                     {networkSvgs[network]}
                                                                 </div> */}
-                                                                <span>{token}</span>
+                                                                <span>{tokenInfo.symbol}</span>
                                                             </li>
                                                         ))}
                                                     </ul>
@@ -207,18 +211,18 @@ export default function CreateOffer() {
                                                     </div>
                                                     {isForTokenOpen && (
                                                         <ul>
-                                                            {tokens[network].map(token => (
-                                                                <li key={network} onClick={() => { 
+                                                            {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
+                                                                <li key={tokenInfo.symbol} onClick={() => { 
                                                                     setIsForTokenOpen(false); 
-                                                                    setForToken(token); 
-                                                                    if(cellingToken == token) {
-                                                                        setCellingToken(tokens[network].find((item) => item != token))
+                                                                    setForToken(tokenInfo.symbol); 
+                                                                    if(cellingToken == tokenInfo.symbol) {
+                                                                        setCellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                                     }
                                                                 }}>
                                                                     {/* <div className='logo'>
                                                                         {networkSvgs[network]}
                                                                     </div> */}
-                                                                    <span>{token}</span>
+                                                                    <span>{tokenInfo.symbol}</span>
                                                                 </li>
                                                             ))}
                                                         </ul>
