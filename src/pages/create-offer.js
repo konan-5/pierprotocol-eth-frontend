@@ -15,28 +15,31 @@ export default function CreateOffer() {
 
     const tokens = tokenInfos.filter((token) => token.network == network)
 
-    const [cellingToken, setCellingToken] = useState(tokens[0].symbol);
+    const [sellingToken, setSellingToken] = useState(tokens[0].symbol);
     const [forToken, setForToken] = useState(tokens[1].symbol);
 
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
     const networkDropdownRef = useRef(null);
 
-    const [isCellingTokenOpen, setIsCellingTokenOpen] = useState(false);
-    const cellingTokenDropdownRef = useRef(null);
+    const [isSellingTokenOpen, setIsSellingTokenOpen] = useState(false);
+    const sellingTokenDropdownRef = useRef(null);
 
     const [isForTokenOpen, setIsForTokenOpen] = useState(false);
     const forTokenDropdownRef = useRef(null);
 
+    const [sellTokenAmount, setSellTokenAmount] = useState(null);
+    const [forTokenAmount, setForTokenAmount] = useState(null);
+
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
-    const cellingTokenToggleDropdown = () => setIsCellingTokenOpen(!isCellingTokenOpen);
+    const sellingTokenToggleDropdown = () => setIsSellingTokenOpen(!isSellingTokenOpen);
     const forTokenToggleDropdown = () => setIsForTokenOpen(!isForTokenOpen);
 
     const handleClickOutside = (event) => {
         if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target)) {
             setIsNetworkOpen(false);
         }
-        if (cellingTokenDropdownRef.current && !cellingTokenDropdownRef.current.contains(event.target)) {
-            setIsCellingTokenOpen(false);
+        if (sellingTokenDropdownRef.current && !sellingTokenDropdownRef.current.contains(event.target)) {
+            setIsSellingTokenOpen(false);
         }
         if (forTokenDropdownRef.current && !forTokenDropdownRef.current.contains(event.target)) {
             setIsForTokenOpen(false);
@@ -44,7 +47,7 @@ export default function CreateOffer() {
     };
 
     useEffect(() => {
-        setCellingToken(tokens[0].symbol)
+        setSellingToken(tokens[0].symbol)
         setForToken(tokens[1].symbol)
     }, [network])
 
@@ -163,22 +166,22 @@ export default function CreateOffer() {
                                     <div className='sell'>
                                         <div className='label'>Selling</div>
                                         <div className='input-area'>
-                                            <input placeholder='Enter amount' />
-                                            <div className='selling-dropdown' ref={cellingTokenDropdownRef}>
-                                                <div className='token-dropdown' onClick={cellingTokenToggleDropdown}>
+                                            <input placeholder='Enter amount' onChange={(e) => setSellingToken(e.target.value)} type='number' value={sellTokenAmount} />
+                                            <div className='selling-dropdown' ref={sellingTokenDropdownRef}>
+                                                <div className='token-dropdown' onClick={sellingTokenToggleDropdown}>
                                                     <span>
-                                                        {cellingToken}
+                                                        {sellingToken}
                                                     </span>
                                                     <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
                                                     </svg>
                                                 </div>
-                                                {isCellingTokenOpen && (
+                                                {isSellingTokenOpen && (
                                                     <ul>
                                                         {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
                                                             <li key={tokenInfo.symbol} onClick={() => {
-                                                                setIsCellingTokenOpen(false);
-                                                                setCellingToken(tokenInfo.symbol);
+                                                                setIsSellingTokenOpen(false);
+                                                                setSellingToken(tokenInfo.symbol);
                                                                 if (forToken == tokenInfo.symbol) {
                                                                     setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                                 }
@@ -197,7 +200,7 @@ export default function CreateOffer() {
                                     <div className='for'>
                                         <div className='label'>For</div>
                                         <div className='input-area'>
-                                            <input placeholder='Enter amount' />
+                                            <input placeholder='Enter amount' onChange={(e) => setForTokenAmount(e.target.value)} type='number' value={forTokenAmount} />
                                             <div className='for-dropdown'>
                                                 <div className='for-dropdown' ref={forTokenDropdownRef}>
                                                     <div className='token-dropdown' onClick={forTokenToggleDropdown}>
@@ -214,8 +217,8 @@ export default function CreateOffer() {
                                                                 <li key={tokenInfo.symbol} onClick={() => {
                                                                     setIsForTokenOpen(false);
                                                                     setForToken(tokenInfo.symbol);
-                                                                    if (cellingToken == tokenInfo.symbol) {
-                                                                        setCellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                                    if (sellingToken == tokenInfo.symbol) {
+                                                                        setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                                     }
                                                                 }}>
                                                                     {/* <div className='logo'>
