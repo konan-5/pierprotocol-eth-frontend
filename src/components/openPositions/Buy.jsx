@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Bitcoin from "../../assets/images/bitcoin-ic.svg";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
-import { fetchSellTokenList } from "@/utils/web3helper";
+import { fetchBookList, fetchSellTokenList } from "@/utils/web3helper";
 import Card from "./Card";
 
 // {
@@ -19,55 +19,84 @@ import Card from "./Card";
 // },
 
 const Buy = () => {
-  // const [sellTokenList, setSellTokenList] = useState([])
-  const [order, setOrder] = useState("ASC");
-  const [buyData, setBuyData] = useState([]);
+    // const [sellTokenList, setSellTokenList] = useState([])
 
-  const sorting = (col) => {
-    const sortedData = [...buyData].sort((a, b) => {
-      const valueA =
-        col === "token.title"
-          ? a.token.title.toLowerCase()
-          : a[col].toLowerCase();
-      const valueB =
-        col === "token.title"
-          ? b.token.title.toLowerCase()
-          : b[col].toLowerCase();
+    const [bookList, setBookList] = useState([])
 
-      if (order === "ASC") {
-        return valueA > valueB ? 1 : -1;
-      } else {
-        return valueA < valueB ? 1 : -1;
-      }
-    });
+    async function processBooks() {
+        try {
+            for await (const bookData of fetchBookList()) {
+                setBookList(currentBooks => {
+                    const isExisting = currentBooks.some(book => book.id === bookData.id);
+                    if (!isExisting) {
+                        return [...currentBooks, bookData];
+                    } else {
+                        return currentBooks;
+                    }
+                })
+            }
+        } catch (error) {
+            console.error(error); // Handle potential errors
+        }
+    }
 
-    setBuyData(sortedData);
-    setOrder(order === "ASC" ? "DSC" : "ASC");
-  };
+    useEffect(() => {
+        processBooks();
+    }, []);
 
-  // const [starStates, setStarStates] = useState(
-  //   Array(buyData.length).fill(false)
-  // );
-  // const handleStarClick = (index) => {
-  //   const updatedStarStates = [...starStates];
-  //   updatedStarStates[index] = !updatedStarStates[index];
-  //   setStarStates(updatedStarStates);
-  // };
+    const [order, setOrder] = useState("ASC");
+    const [buyData, setBuyData] = useState([]);
 
-  // useEffect(() => {
-  //   fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
-  // }, [])
+    const sorting = (col) => {
+        const sortedData = [...buyData].sort((a, b) => {
+            const valueA =
+                col === "token.title"
+                    ? a.token.title.toLowerCase()
+                    : a[col].toLowerCase();
+            const valueB =
+                col === "token.title"
+                    ? b.token.title.toLowerCase()
+                    : b[col].toLowerCase();
 
-  return (
-    <>
-      <div className="buy-board">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-      </div>
-    </>
-  );
+            if (order === "ASC") {
+                return valueA > valueB ? 1 : -1;
+            } else {
+                return valueA < valueB ? 1 : -1;
+            }
+        });
+
+        setBuyData(sortedData);
+        setOrder(order === "ASC" ? "DSC" : "ASC");
+    };
+
+    // const [starStates, setStarStates] = useState(
+    //   Array(buyData.length).fill(false)
+    // );
+    // const handleStarClick = (index) => {
+    //   const updatedStarStates = [...starStates];
+    //   updatedStarStates[index] = !updatedStarStates[index];
+    //   setStarStates(updatedStarStates);
+    // };
+
+    // useEffect(() => {
+    //   fetchSellTokenList().then((resp) => { setBuyData(resp); console.log(resp) })
+    // }, [])
+
+    return (
+        <>
+            <div className="buy-board">
+                {
+                    bookList.map((item) => {
+                        return <Card key={item.id} book={item}/>
+                    })
+                }
+                {/* <Card />
+                <Card />
+                <Card />
+                <Card /> */}
+            </div>
+        </>
+    );
 };
 
 export default Buy;

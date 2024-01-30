@@ -1913,22 +1913,7 @@ const PierMarketplace = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_pierToken",
-                "type": "address"
-            },
-            {
-                "internalType": "address payable",
-                "name": "_pierStaking",
-                "type": "address"
-            },
-            {
-                "internalType": "address payable",
-                "name": "_pierWallet",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_wethAddress",
+                "name": "_feeWallet",
                 "type": "address"
             }
         ],
@@ -1958,29 +1943,116 @@ const PierMarketplace = [
         "type": "error"
     },
     {
+        "inputs": [],
+        "name": "FailedInnerCall",
+        "type": "error"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "amount",
+                "name": "buyerAllowance",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "paymentTokenAmount",
                 "type": "uint256"
             }
         ],
-        "name": "AmountMustBeGreaterThanZero",
+        "name": "InsufficientAllowanceOfBuyer",
         "type": "error"
     },
     {
-        "inputs": [],
-        "name": "ApprovalFailed",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "sellerAllowance",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellTokenAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "InsufficientAllowanceOfSeller",
         "type": "error"
     },
     {
-        "inputs": [],
-        "name": "EtherTransferFailed",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "sellerBalance",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellTokenAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "InsufficientAmountOfSeller",
         "type": "error"
     },
     {
-        "inputs": [],
-        "name": "FailedInnerCall",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "buyerBalance",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "paymentTokenAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "InsufficientBalanceOfBuyer",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "feeRate",
+                "type": "uint256"
+            }
+        ],
+        "name": "InvalidFeeRate",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "feeWallet",
+                "type": "address"
+            }
+        ],
+        "name": "InvalidFeeWalletAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            }
+        ],
+        "name": "InvalidFriendTokenAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "paymentTokenAddress",
+                "type": "address"
+            }
+        ],
+        "name": "InvalidPaymentTokenAddress",
         "type": "error"
     },
     {
@@ -1991,29 +2063,40 @@ const PierMarketplace = [
                 "type": "uint256"
             }
         ],
-        "name": "IncorrectAmountOfEtherSent",
+        "name": "InvalidPaymentTokenAmount",
         "type": "error"
     },
     {
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "paymentTokenAllowance",
+                "name": "purchasePercent",
                 "type": "uint256"
             }
         ],
-        "name": "InsufficientAllowanceForPaymentToken",
+        "name": "InvalidPurchasePercent",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            }
+        ],
+        "name": "InvalidSellTokenAddress",
         "type": "error"
     },
     {
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "buyerBalance",
+                "name": "amount",
                 "type": "uint256"
             }
         ],
-        "name": "InsufficientBalance",
+        "name": "InvalidSellTokenAmount",
         "type": "error"
     },
     {
@@ -2040,7 +2123,7 @@ const PierMarketplace = [
                 "type": "address"
             }
         ],
-        "name": "OnlyTheSellerCanRemoveTheListing",
+        "name": "OnlyTheSellerCanRemoveTheBook",
         "type": "error"
     },
     {
@@ -2066,28 +2149,6 @@ const PierMarketplace = [
         "type": "error"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "paymentTokenAddress",
-                "type": "address"
-            }
-        ],
-        "name": "PaymentTokenAddressMustBeValid",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
-            }
-        ],
-        "name": "PriceMustBeGreaterThanZero",
-        "type": "error"
-    },
-    {
         "inputs": [],
         "name": "ReentrancyGuardReentrantCall",
         "type": "error"
@@ -2104,55 +2165,141 @@ const PierMarketplace = [
         "type": "error"
     },
     {
+        "anonymous": false,
         "inputs": [
             {
+                "indexed": true,
                 "internalType": "uint256",
-                "name": "balance",
+                "name": "bookId",
                 "type": "uint256"
             }
         ],
-        "name": "SellerHasInsufficientBalance",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "tokenAddress",
-                "type": "address"
-            }
-        ],
-        "name": "TokenAddressMustBeValid",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "TokenTransferFailed",
-        "type": "error"
+        "name": "BookForEthRemoved",
+        "type": "event"
     },
     {
         "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "bookId",
+                "type": "uint256"
+            }
+        ],
+        "name": "BookRemoved",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "bookId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
                 "internalType": "address",
-                "name": "tokenAddress",
+                "name": "seller",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sellTokenAddress",
                 "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "amount",
+                "name": "sellTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "paymentTokenAddress",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "paymentTokenAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "Booked",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "bookForEthCount",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "seller",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "sellTokenAddress",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "sellTokenAmount",
                 "type": "uint256"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "discountRate",
+                "name": "ethAmount",
                 "type": "uint256"
             }
         ],
-        "name": "DiscountTokenUpdated",
+        "name": "BookedForEth",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "feeWallet",
+                "type": "address"
+            }
+        ],
+        "name": "FeeWalletAddressUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "feeRate",
+                "type": "uint256"
+            }
+        ],
+        "name": "FriendTokenUpdated",
         "type": "event"
     },
     {
@@ -2180,44 +2327,7 @@ const PierMarketplace = [
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "listingId",
-                "type": "uint256"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "seller",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "tokenAddress",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "tokenAmountToSell",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
-            }
-        ],
-        "name": "TokenListed",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "listingId",
+                "name": "bookId",
                 "type": "uint256"
             },
             {
@@ -2225,24 +2335,6 @@ const PierMarketplace = [
                 "internalType": "address",
                 "name": "buyer",
                 "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "tokenAddress",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "tokenAmountToSell",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
             }
         ],
         "name": "TokenPurchased",
@@ -2254,44 +2346,7 @@ const PierMarketplace = [
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "listingId",
-                "type": "uint256"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "seller",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "tokenAddress",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "tokenAmountToBuy",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
-            }
-        ],
-        "name": "TokenSold",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "listingId",
+                "name": "bookForEthId",
                 "type": "uint256"
             },
             {
@@ -2299,81 +2354,47 @@ const PierMarketplace = [
                 "internalType": "address",
                 "name": "buyer",
                 "type": "address"
-            },
+            }
+        ],
+        "name": "TokenPurchasedForEth",
+        "type": "event"
+    },
+    {
+        "inputs": [
             {
-                "indexed": true,
                 "internalType": "address",
-                "name": "tokenToBuyAddress",
+                "name": "sellTokenAddress",
                 "type": "address"
             },
             {
-                "indexed": false,
                 "internalType": "uint256",
-                "name": "tokenAmountToBuy",
+                "name": "sellTokenAmount",
                 "type": "uint256"
             },
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
                 "internalType": "address",
                 "name": "paymentTokenAddress",
                 "type": "address"
-            }
-        ],
-        "name": "TokenToBuyListed",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "listingId",
-                "type": "uint256"
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "buyer",
-                "type": "address"
-            }
-        ],
-        "name": "WTBListingRemoved",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
                 "internalType": "uint256",
-                "name": "listingId",
+                "name": "paymentTokenAmount",
                 "type": "uint256"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "seller",
-                "type": "address"
             }
         ],
-        "name": "WTSListingRemoved",
-        "type": "event"
+        "name": "book",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
     },
     {
         "inputs": [],
-        "name": "WETH",
+        "name": "bookCount",
         "outputs": [
             {
-                "internalType": "contract IWETH",
+                "internalType": "uint256",
                 "name": "",
-                "type": "address"
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -2383,20 +2404,131 @@ const PierMarketplace = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_address",
+                "name": "sellTokenAddress",
                 "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "ethAmount",
+                "type": "uint256"
             }
         ],
-        "name": "addToBlacklist",
+        "name": "bookForEth",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "bookForEthCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "listingId",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "bookForEthList",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "seller",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "sellTokenAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "ethAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "isActive",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "bookList",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "seller",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "sellTokenAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "paymentTokenAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "paymentTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "isActive",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "bookId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "purchasePercent",
                 "type": "uint256"
             }
         ],
@@ -2408,22 +2540,24 @@ const PierMarketplace = [
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "bookForEthId",
+                "type": "uint256"
+            }
+        ],
+        "name": "buyTokenWithEth",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "feeWallet",
+        "outputs": [
+            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
-            }
-        ],
-        "name": "discountTokens",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "minAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "discountRate",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -2433,56 +2567,19 @@ const PierMarketplace = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "tokenAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenAmountToSell",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "sellPriceInWei",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "paymentTokenAddress",
+                "name": "",
                 "type": "address"
             }
         ],
-        "name": "listTokenForSale",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
+        "name": "friendTokenFeeList",
+        "outputs": [
             {
-                "internalType": "address",
-                "name": "tokenToBuyAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenAmountToBuy",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "buyPriceInWei",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "paymentTokenAddress",
-                "type": "address"
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
             }
         ],
-        "name": "listTokenToBuy",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -2499,53 +2596,14 @@ const PierMarketplace = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "pierStaking",
-        "outputs": [
-            {
-                "internalType": "address payable",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "pierToken",
-        "outputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "pierWallet",
-        "outputs": [
-            {
-                "internalType": "address payable",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_address",
-                "type": "address"
+                "internalType": "uint256",
+                "name": "bookId",
+                "type": "uint256"
             }
         ],
-        "name": "removeFromBlacklist",
+        "name": "removeBook",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -2554,24 +2612,11 @@ const PierMarketplace = [
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "listingId",
+                "name": "bookId",
                 "type": "uint256"
             }
         ],
-        "name": "removeWTBListing",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "listingId",
-                "type": "uint256"
-            }
-        ],
-        "name": "removeWTSListing",
+        "name": "removeBookForEth",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -2579,58 +2624,6 @@ const PierMarketplace = [
     {
         "inputs": [],
         "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "listingId",
-                "type": "uint256"
-            }
-        ],
-        "name": "sellToken",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address payable",
-                "name": "_pierStaking",
-                "type": "address"
-            }
-        ],
-        "name": "setPierStaking",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_pierToken",
-                "type": "address"
-            }
-        ],
-        "name": "setPierToken",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address payable",
-                "name": "_pierWallet",
-                "type": "address"
-            }
-        ],
-        "name": "setPierWallet",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -2652,142 +2645,32 @@ const PierMarketplace = [
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_tokenAddress",
+                "name": "walletAddress",
                 "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_discountRate",
-                "type": "uint256"
             }
         ],
-        "name": "updateDiscountTokens",
+        "name": "updateFeeWallet",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "wtbListingCount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "wtbListings",
-        "outputs": [
             {
                 "internalType": "address",
                 "name": "tokenAddress",
                 "type": "address"
             },
             {
-                "internalType": "address",
-                "name": "buyer",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenAmountToBuy",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "paymentTokenAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "isActive",
-                "type": "bool"
+                "internalType": "uint8",
+                "name": "feeRate",
+                "type": "uint8"
             }
         ],
-        "stateMutability": "view",
+        "name": "updateFriendToken",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "wtsListingCount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "wtsListings",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "tokenAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "seller",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenAmountToSell",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "priceInWei",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "paymentTokenAddress",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "isActive",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "stateMutability": "payable",
-        "type": "receive"
     }
 ]
 

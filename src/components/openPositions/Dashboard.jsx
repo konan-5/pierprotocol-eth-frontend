@@ -4,8 +4,10 @@ import Buy from "./Buy";
 import Sell from "./Sell";
 import Activity from "./Activity";
 import Link from "next/link";
+import { fetchBookList } from "@/utils/web3helper";
 
 const Dashboard = () => {
+    
     return (
         <div className="dashboard-area">
             <div className="container">

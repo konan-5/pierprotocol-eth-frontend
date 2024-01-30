@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const Card = () => {
+const Card = ({book}) => {
     const router = useRouter();
     return (
         <div className="card">
@@ -25,11 +25,11 @@ const Card = () => {
                             fill="white"
                         />
                     </svg>
-                    <div>0.8012 BTC</div>
+                    <div>{book.sellTokenAmount} {book.sellTokenInfo.symbol}</div>
                 </div>
                 <div className="seller">
                     <div>Seller</div>
-                    <a>ox33333333</a>
+                    <a>{book.book[0].substring(0, 5)}</a>
                 </div>
             </div>
             <div className="detail">

@@ -28,6 +28,17 @@ async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei
     console.log(listStatus)
 }
 
+async function book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenamount) {
+    const web3 = new Web3(window.ethereum);
+    const accounts = await web3.eth.getAccounts();
+    const tokenContract = new web3.eth.Contract(ERC20, sellTokenInfo.address);
+    const response = await tokenContract.methods.approve(process.env.NEXT_PUBLIC_PIER_MARKETPLACE, sellTokenAmount * (10 ** sellTokenInfo.decimals)).send({from: accounts[0]});
+    console.log(response);
+
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
+    const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
+    console.log(status)
+}
 
 async function fetchSellTokenList() {
     const web3 = new Web3(provider);
@@ -55,4 +66,41 @@ async function fetchSellTokenList() {
     return waiterList;
 }
 
-export { getTokenDetails, orderTokenForSell, fetchSellTokenList }
+// async function fetchBookList() {
+//     const web3 = new Web3(provider);
+//     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
+//     console.log(pierMarketplaceContract)
+//     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call())
+//     for (let i = 1; i <= bookCount; i ++) {
+//         const book = await pierMarketplaceContract.methods.bookList(i).call();
+//         const sellTokenInfo = tokenInfos.find((item) => item.address == book[1])
+//         const forTokenInfo = tokenInfos.find((item) => item.address == book[3]);
+//         console.log(book, sellTokenInfo, forTokenInfo)
+//     }
+// }
+
+async function* fetchBookList() {
+    const web3 = new Web3(provider);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE);
+    const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
+
+    for (let i = 1; i <= bookCount; i++) {
+        const book = await pierMarketplaceContract.methods.bookList(i).call();
+        const sellTokenInfo = tokenInfos.find((item) => item.address === book[1]);
+        const forTokenInfo = tokenInfos.find((item) => item.address === book[3]);
+
+        // Use `yield` to return each book's data immediately
+        yield {
+            id: i,
+            book: book,
+            sellTokenInfo: sellTokenInfo,
+            forTokenInfo: forTokenInfo,
+            sellTokenAmount: Number(book[2]) / (10 ** sellTokenInfo.decimals),
+            forTokenAmount: Number(book[4]) / (10 ** sellTokenInfo.decimals),
+            isActive: book[5],
+        };
+    }
+}
+
+
+export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList }
