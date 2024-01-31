@@ -123,4 +123,17 @@ async function fetchBook (id) {
     };
 }
 
-export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList, fetchBook }
+async function buyBook (book, percent) {
+    const web3 = new Web3(window.ethereum);
+    const accounts = await web3.eth.getAccounts();
+    const tokenContract = new web3.eth.Contract(ERC20, book.forTokenInfo.address);
+    const response = await tokenContract.methods.approve(process.env.NEXT_PUBLIC_PIER_MARKETPLACE, book.forTokenAmount * (10 ** book.forTokenInfo.decimals)).send({from: accounts[0]});
+    console.log(response)
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE)
+    // const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
+    console.log(book.id, percent)
+    const status = await pierMarketplaceContract.methods.buyToken(book.id, percent).send({from: accounts[0]})
+    console.log(status)
+}
+
+export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList, fetchBook, buyBook }
