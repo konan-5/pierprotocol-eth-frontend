@@ -87,7 +87,8 @@ const Buy = () => {
             <div className="buy-board">
                 {
                     bookList.map((item) => {
-                        return <Card key={item.id} book={item}/>
+                        if(item.isActive)
+                            return <Card key={item.id} book={item}/>
                     })
                 }
                 {/* <Card />
