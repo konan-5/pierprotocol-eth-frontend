@@ -1046,13 +1046,12 @@ body {
 }
 
 .dashboard-table {
-    //   background: #18191d;
-    // background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
-    // top: 200px;
+    background-color: #010114;
+    border-radius: 10px;
     margin-top: 20px;
-    padding: 5px 30px;
-
+    .odd {
+        background-color: #221F1F;
+    }
     .table> :not(caption)>*>* {
         background: none;
         color: #fff;
@@ -1079,6 +1078,8 @@ body {
     .table {
         margin-bottom: 0;
         border: none;
+
+        padding: 0 20px;
 
         thead {
             background-color: rgba(255, 255, 255, 0.15);
@@ -1108,6 +1109,9 @@ body {
             &:last-child {
                 padding: 0;
                 width: 180px;
+            }
+            &:first-child {
+                padding-left: 30px;
             }
         }
 

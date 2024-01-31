@@ -157,7 +157,7 @@ const Activity = () => {
                     </thead>
                     <tbody>
                         {buyData.map((item, index) => (
-                            <tr key={item.id}>
+                            <tr key={item.id} className={`${index % 2 == 1? "odd": ""} tr`}>
                                 <td className="table-title">
                                     <div
                                         className={`star-icon ${starStates[index] ? "start-button" : ""
