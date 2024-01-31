@@ -21,7 +21,8 @@ function ProgressBar({ max, value, setValue, onChange }) {
 
     const handleMouseMove = useCallback(
         (event) => {
-            const newProgress = getProgressFromMouseEvent(event);
+            let newProgress = getProgressFromMouseEvent(event);
+            newProgress = Math.ceil(newProgress)
             setValue(newProgress);
             onChange(newProgress);
         },

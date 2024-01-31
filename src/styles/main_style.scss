@@ -1522,6 +1522,7 @@ body {
                     .address {
                         display: flex;
                         align-items: center;
+                        cursor: pointer;
                         justify-content: space-between;
                         font-size: 12px;
                         background-color: rgba(242, 242, 242, 0.05);
@@ -1663,4 +1664,17 @@ body {
         border-radius: 50%;
         cursor: pointer;
     }
+}
+
+.progressCircle {
+    transition: stroke-dashoffset 1s ease-out 0s;
+    transform-origin: center center;
+    transform: scale(1.1);
+    /* Example of a transformation */
+}
+
+.progressText {
+    font-size: 20px;
+    fill: #ffffff;
+    /* White color for the percentage text */
 }

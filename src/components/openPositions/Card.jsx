@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 
 const Card = ({book}) => {
     useEffect(() => {
-        console.log(book)
     }, [])
     const router = useRouter();
     return (

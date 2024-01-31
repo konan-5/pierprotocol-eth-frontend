@@ -102,5 +102,25 @@ async function* fetchBookList() {
     }
 }
 
+async function fetchBook (id) {
+    const web3 = new Web3(provider);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, process.env.NEXT_PUBLIC_PIER_MARKETPLACE);
+    const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
 
-export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList }
+    const book = await pierMarketplaceContract.methods.bookList(id).call();
+    const sellTokenInfo = tokenInfos.find((item) => item.address === book[1]);
+    const forTokenInfo = tokenInfos.find((item) => item.address === book[3]);
+
+    // Use `yield` to return each book's data immediately
+    return {
+        id: id,
+        book: book,
+        sellTokenInfo: sellTokenInfo,
+        forTokenInfo: forTokenInfo,
+        sellTokenAmount: Number(book[2]) / (10 ** sellTokenInfo.decimals),
+        forTokenAmount: Number(book[4]) / (10 ** sellTokenInfo.decimals),
+        isActive: book[5],
+    };
+}
+
+export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList, fetchBook }
