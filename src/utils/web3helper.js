@@ -4,7 +4,7 @@ import { tokenInfos } from './tokenList';
 
 const provider = "https://ethereum-sepolia.publicnode.com"
 
-NEXT_PUBLIC_PIER_MARKETPLACE="0xF2B20aD0E924ffe531E52227A8364Ec338A36358"
+const NEXT_PUBLIC_PIER_MARKETPLACE="0xF2B20aD0E924ffe531E52227A8364Ec338A36358"
 
 async function getTokenDetails(tokenAddress) {
     const web3 = new Web3(window.ethereum);
