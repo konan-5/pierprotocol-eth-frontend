@@ -193,12 +193,12 @@ export default function Buy() {
                                     </div>
                                     <div className='amount'>
                                         <span>
-                                            {book.forTokenAmount * percent / 100}
+                                            {book.forTokenAmount / 100 * percent}
                                         </span>
                                         <img src={book.forTokenInfo.logo} alt={book.forTokenInfo.symbol} width={30} />
                                     </div>
                                     <div className='value-setting'>
-                                        ${book.forTokenAmount * percent / 100 * 1}
+                                        ${book.forTokenAmount / 100 * percent}
                                     </div>
                                 </div>
                                 <button onClick={buy}>
