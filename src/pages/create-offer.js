@@ -6,6 +6,7 @@ import { networkSvgs } from '@/utils/svg';
 import { tokenInfos } from '@/utils/tokenList';
 import Web3 from 'web3';
 import { book, fetchBookList } from '@/utils/web3helper';
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function CreateOffer() {
     const [web3, setWeb3] = useState(null);
@@ -93,6 +94,8 @@ export default function CreateOffer() {
     const sellingTokenToggleDropdown = () => setIsSellingTokenOpen(!isSellingTokenOpen);
     const forTokenToggleDropdown = () => setIsForTokenOpen(!isForTokenOpen);
 
+    const [booking, setBooking] = useState(false);
+
     const handleClickOutside = (event) => {
         if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target)) {
             setIsNetworkOpen(false);
@@ -106,13 +109,21 @@ export default function CreateOffer() {
     };
 
     const sellToken = async () => {
-        if (!isConnected) {
-            await connectWallet()
+        try {
+            setBooking(true)
+            if (!isConnected) {
+                await connectWallet()
+            }
+            const sellTokenInfo = tokens.find(item => item.symbol == sellingToken)
+            const forTokenInfo = tokens.find(item => item.symbol == forToken)
+            console.log(network, sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
+            await book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
+            router.push("/dashboard")
+        } catch {
+
+        } finally {
+            setBooking(false)
         }
-        const sellTokenInfo = tokens.find(item => item.symbol == sellingToken)
-        const forTokenInfo = tokens.find(item => item.symbol == forToken)
-        console.log(network, sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
-        await book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
     }
 
     useEffect(() => {
@@ -121,7 +132,7 @@ export default function CreateOffer() {
         setSellingToken(tokens[0].symbol)
         setForToken(tokens[1].symbol)
     }, [network])
-    
+
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -304,15 +315,36 @@ export default function CreateOffer() {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className='navigate-button'>
-                                        <button className='back' onClick={() => setTabStatus('network')}>
-                                            Back
-                                        </button>
-                                        <button className='next' onClick={sellToken}>
-                                            Sell
-                                        </button>
-                                    </div>
+                                    {
+                                        booking ?
+                                            // <div className='navigate-button'>
+                                            //     <button className='back' onClick={() => setTabStatus('network')}>
+                                            //         Back
+                                            //     </button>
+                                            //     <button className='next' onClick={sellToken}>
+                                            //         Sell
+                                            //     </button>
+                                            // </div> :
+                                            <div className='navigate-button'>
+                                                <button className='back' onClick={() => setTabStatus('network')} disabled>
+                                                    {/* <div className='spin'>
+                                                    </div> */}
+                                                    Back
+                                                </button>
+                                                <button className='next' onClick={sellToken} disabled>
+                                                    {/* <div className='spin'>loading...</div> */}
+                                                    Sell
+                                                </button>
+                                            </div>
+                                        :<div className='navigate-button'>
+                                            <button className='back' onClick={() => setTabStatus('network')}>
+                                                Back
+                                            </button>
+                                            <button className='next' onClick={sellToken}>
+                                                Sell
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                         }
                     </div>

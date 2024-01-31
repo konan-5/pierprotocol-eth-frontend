@@ -979,7 +979,7 @@ body {
         padding: 20px;
         border-radius: 15px;
         color: white;
-        background-color: rgba(255, 255, 255, 0.12);
+        background-color: #1f1f30;
 
         .summary,
         .detail {
@@ -1340,6 +1340,7 @@ body {
                     position: absolute;
                     border-radius: 5px;
                     top: 60px;
+                    z-index: 1;
 
                     li {
                         width: 100%;
@@ -1410,6 +1411,12 @@ body {
                     padding: 20px;
                     width: 100%;
                     border-radius: 10px;
+                    position: relative;
+                    .spin {
+                        position: absolute;
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
                 }
 
                 .back {
