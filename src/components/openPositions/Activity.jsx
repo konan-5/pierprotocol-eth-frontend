@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Bitcoin from "../../assets/images/bitcoin-ic.svg";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
+import { fetchActivity } from "@/utils/web3helper";
 
 const Activity = () => {
+    useEffect(() => {
+        fetchActivity()
+    }, [])
     const [order, setOrder] = useState("ASC");
     const [buyData, setBuyData] = useState([
         {
