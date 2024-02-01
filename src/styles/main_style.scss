@@ -1153,17 +1153,17 @@ body {
         }
 
         .subTitle {
-            font-size: 12px;
-            color: #b1b5c3;
+            font-size: 14px;
+            color: #F7931A;
             position: relative;
             display: flex;
             align-items: center;
 
-            &::before {
-                content: "|";
-                font-size: 21px;
-                margin-right: 8px;
-            }
+            // &::before {
+            //     content: "|";
+            //     font-size: 21px;
+            //     margin-right: 8px;
+            // }
         }
     }
 }

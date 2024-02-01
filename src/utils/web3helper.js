@@ -24,11 +24,9 @@ async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei
     const tokenContract = new web3.eth.Contract(ERC20, tokenAddress);
     const decimals = Number(await tokenContract.methods.decimals().call());
     const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, tokenAmountToSell * (10 ** decimals)).send({ from: accounts[0] });
-    console.log(response)
 
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
     const listStatus = await pierMarketplaceContract.methods.listTokenForSale(tokenAddress, tokenAmountToSell * (10 ** decimals), sellPriceInWei * (10 ** 18), accounts[0]).send({ from: accounts[0] })
-    console.log(listStatus)
 }
 
 async function book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenamount) {
@@ -36,18 +34,15 @@ async function book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenamount
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, sellTokenInfo.address);
     const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, sellTokenAmount * (10 ** sellTokenInfo.decimals)).send({from: accounts[0]});
-    console.log(response);
 
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
     const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
-    console.log(status)
 }
 
 async function fetchSellTokenList() {
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
     const waiter = Number(await pierMarketplaceContract.methods.wtsListingCount().call())
-    console.log(waiter)
     const waiterList = []
     for (let i = 1; i <= waiter; i++) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
@@ -72,13 +67,11 @@ async function fetchSellTokenList() {
 // async function fetchBookList() {
 //     const web3 = new Web3(provider);
 //     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
-//     console.log(pierMarketplaceContract)
 //     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call())
 //     for (let i = 1; i <= bookCount; i ++) {
 //         const book = await pierMarketplaceContract.methods.bookList(i).call();
 //         const sellTokenInfo = tokenInfos.find((item) => item.address == book[1])
 //         const forTokenInfo = tokenInfos.find((item) => item.address == book[3]);
-//         console.log(book, sellTokenInfo, forTokenInfo)
 //     }
 // }
 
@@ -131,12 +124,9 @@ async function buyBook (book, percent) {
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, book.forTokenInfo.address);
     const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, book.forTokenAmount * (10 ** book.forTokenInfo.decimals)).send({from: accounts[0]});
-    console.log(response)
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
     // const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
-    console.log(book.id, percent)
     const status = await pierMarketplaceContract.methods.buyToken(book.id, percent).send({from: accounts[0]})
-    console.log(status)
 }
 
 function delay(ms) {
@@ -182,51 +172,94 @@ function hexToDateTime(hexString) {
     return date.toUTCString(); // Converting to a human-readable format
 }
 
-async function fetchActivity () {
-    const buyBook = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
-    const bookTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
-    // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
-    const buyResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyBook}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
+async function fetchBookListBatch(ids) {
+    const web3 = new Web3(provider);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE);
 
-    let buyActivitys = []
-    for(let item of buyResponse.data.result) {
-        const data = [...item.topics, ...splitInto64LengthArray(item.data)]
-        console.log(item.timeStamp)
-        const buyActivity = {
-            bookId: hexToDecimal(data[1]),
-            seller: formatAddress(data[2]),
-            sellTokenAddress: formatAddress(data[3]),
-            sellTokenAmount: hexToDecimal(data[4]),
-            paymentTokenAddress: formatAddress(data[5]),
-            paymentTokenAmount: hexToDecimal(data[6]),
-            timeStamp: hexToDateTime(item.timeStamp),
-            unixTime: hexToDecimal(item.timeStamp)
-        }
-        buyActivitys.push(buyActivity)
-    }
-    
-    let bookActivitys = []
+    // Create a promise for each book fetch operation
+    const bookPromises = ids.map(async (id) => {
+        const book = await pierMarketplaceContract.methods.bookList(id).call();
+        const sellTokenInfo = tokenInfos.find((item) => item.address === book[1]);
+        const forTokenInfo = tokenInfos.find((item) => item.address === book[3]);
+
+        // Calculate token amounts considering their decimals
+        const sellTokenAmount = Number(book[2]) / (10 ** sellTokenInfo.decimals);
+        const forTokenAmount = Number(book[4]) / (10 ** forTokenInfo.decimals);
+
+        return {
+            id: id,
+            book: book,
+            sellTokenInfo: sellTokenInfo,
+            forTokenInfo: forTokenInfo,
+            sellTokenAmount: sellTokenAmount,
+            forTokenAmount: forTokenAmount,
+            isActive: book[5],
+        };
+    });
+
+    // Wait for all promises to resolve and return the results
+    return await Promise.all(bookPromises);
+}
+
+async function fetchActivity () {
+    const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
+    const buyTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
+    // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
     const bookResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${bookTopic}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
+
+    let bookActivitys = []
     for(let item of bookResponse.data.result) {
         const data = [...item.topics, ...splitInto64LengthArray(item.data)]
-        console.log(item.timeStamp)
-        const bookId = hexToDecimal(data[1])
-        const bookInfo = await fetchBook(bookId)
+        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
+        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
         const bookActivity = {
-            bookId: bookId,
+            category: 'book',
+            bookId: hexToDecimal(data[1]),
             seller: formatAddress(data[2]),
-            buyer: formatAddress(data[3]),
-            sellTokenAddress: bookInfo.sellTokenInfo.address,
-            paymentTokenAddress: bookInfo.forTokenInfo.address,
-            sellTokenAmount: hexToDecimal(data[4]),
-            paymentTokenAmount: hexToDecimal(data[5]),
+            buyer: "",
+            sellTokenInfo: sellTokenInfo,
+            sellTokenAmount: hexToDecimal(data[4]) / (10 ** sellTokenInfo.decimals),
+            forTokenInfo: forTokenInfo,
+            forTokenAmount: hexToDecimal(data[6]) / (10 ** forTokenInfo.decimals),
             timeStamp: hexToDateTime(item.timeStamp),
             unixTime: hexToDecimal(item.timeStamp)
         }
         bookActivitys.push(bookActivity)
     }
+    
+    let buyActivitys = []
+    const buyResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
+    
+    let bookIds = []
 
-    console.log(buyActivitys, bookActivitys, 111)
+    for(let item of buyResponse.data.result) {
+        const data = [...item.topics, ...splitInto64LengthArray(item.data)]
+        const bookId = hexToDecimal(data[1])
+        const buyActivity = {
+            category: 'buy',
+            bookId: bookId,
+            seller: formatAddress(data[2]),
+            buyer: formatAddress(data[3]),
+            sellTokenAmount: hexToDecimal(data[4]),
+            forTokenAmount: hexToDecimal(data[5]),
+            timeStamp: hexToDateTime(item.timeStamp),
+            unixTime: hexToDecimal(item.timeStamp)
+        }
+        buyActivitys.push(buyActivity)
+        bookIds.push(bookId)
+    }
+
+    const bookList = await fetchBookListBatch(bookIds)
+    for(let idx in buyActivitys) {
+        buyActivitys[idx].sellTokenInfo = bookList[idx].sellTokenInfo
+        buyActivitys[idx].forTokenInfo = bookList[idx].forTokenInfo
+        buyActivitys[idx].sellTokenAmount = buyActivitys[idx].sellTokenAmount / (10 ** bookList[idx].sellTokenInfo.decimals)
+        buyActivitys[idx].forTokenAmount = buyActivitys[idx].forTokenAmount / (10 ** bookList[idx].forTokenInfo.decimals)
+    }
+
+    const activitys = [...bookActivitys, ...buyActivitys]
+
+    return activitys.sort((a, b) => b.unixTime - a.unixTime)
 }
 
 export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList, fetchBook, buyBook, fetchActivity }
