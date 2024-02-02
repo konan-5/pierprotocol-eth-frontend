@@ -21,13 +21,13 @@ const Dashboard = () => {
                                 <div className="tabs-nav">
                                     <Nav variant="pills">
                                         <Nav.Item>
-                                            <Nav.Link eventKey="first">BUY</Nav.Link>
+                                            <Nav.Link eventKey="first" onClick={() => setSearchWord("")}>BUY</Nav.Link>
                                         </Nav.Item>
                                         {/* <Nav.Item>
-                      <Nav.Link eventKey="second">SELL</Nav.Link>
-                    </Nav.Item> */}
+                                            <Nav.Link eventKey="second">SELL</Nav.Link>
+                                        </Nav.Item> */}
                                         <Nav.Item>
-                                            <Nav.Link eventKey="third">Activity</Nav.Link>
+                                            <Nav.Link eventKey="third" onClick={() => setSearchWord("")}>Activity</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                     <div className="search">
