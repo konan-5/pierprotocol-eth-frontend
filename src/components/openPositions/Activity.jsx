@@ -4,13 +4,40 @@ import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
 import { fetchActivity } from "@/utils/web3helper";
 
-const Activity = () => {
+const Activity = ({ searchWord }) => {
     const [activitys, setActivitys] = useState();
+    const [filteredActivitys, setFilteredActivitys] = useState();
     async function init() {
         const activitys = await fetchActivity()
-        console.log(activitys)
         setActivitys(activitys)
     }
+
+    const filterActivitys = () => {
+        if (activitys) {
+            if (searchWord == null) {
+                setFilteredActivitys([...activitys])
+            } else {
+                setFilteredActivitys(
+                    activitys.filter(
+                        activity => searchWord
+                            .toLowerCase()
+                            .split('')
+                            .every(
+                                letter => `${activity.category == 'book' ? 'Listed' : 'Completed'}${activity.sellTokenAmount}${activity.forTokenAmount}${activity.sellTokenInfo.symbol}`
+                                    .toLowerCase()
+                                    .includes(letter)
+                            )
+                    )
+                )
+            }
+        }
+    }
+
+    useEffect(() => {
+        console.log(searchWord, activitys)
+        filterActivitys()
+    }, [searchWord, activitys])
+
     useEffect(() => {
         init()
     }, [])
@@ -142,7 +169,7 @@ const Activity = () => {
 
     return (
         <>
-            {activitys &&
+            {filteredActivitys &&
                 <div className="table-responsive dashboard-table">
                     <table className="table">
                         <thead>
@@ -171,8 +198,8 @@ const Activity = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {activitys.map((item, index) => (
-                                <tr key={item.bookId} className={`${index % 2 == 1 ? "odd" : ""} tr`}>
+                            {filteredActivitys.map((item, index) => (
+                                <tr key={`activity${index}`} className={`${index % 2 == 1 ? "odd" : ""} tr`}>
                                     <td>
                                         {item.bookId}
                                     </td>
@@ -189,7 +216,7 @@ const Activity = () => {
                                     <td>{item.sellTokenAmount}</td>
                                     <td>{item.forTokenAmount}</td>
                                     <td className="seller-text">{item.seller.substring(0, 8)}</td>
-                                    <td className="seller-text">{item.buyer.substring(0,8)}</td>
+                                    <td className="seller-text">{item.buyer.substring(0, 8)}</td>
                                     <td>
                                         {item.category === "buy" && (
                                             <button className="btn-completed">Completed</button>

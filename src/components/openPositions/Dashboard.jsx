@@ -7,7 +7,9 @@ import Link from "next/link";
 import { fetchBookList } from "@/utils/web3helper";
 
 const Dashboard = () => {
-    
+
+    const [searchWord, setSearchWord] = useState(null)
+
     return (
         <div className="dashboard-area">
             <div className="container">
@@ -39,7 +41,7 @@ const Dashboard = () => {
                                                 </clipPath>
                                             </defs>
                                         </svg>
-                                        <input placeholder="Enter token name or mint address" />
+                                        <input placeholder="Enter token name or mint address" onChange={(e) => setSearchWord(e.target.value)} value={searchWord} />
                                     </div>
                                     <div className="ml-lg-auto">
                                         <Link href={"/create-offer"} className="btn-lg create-offer">
@@ -80,10 +82,10 @@ const Dashboard = () => {
                                 </div>
                                 <Tab.Content>
                                     <Tab.Pane eventKey="first">
-                                        <Buy />
+                                        <Buy searchWord={searchWord} />
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="third">
-                                        <Activity />
+                                        <Activity searchWord={searchWord} />
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Tab.Container>

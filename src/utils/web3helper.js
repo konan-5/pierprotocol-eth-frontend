@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const provider = "https://ethereum-sepolia.publicnode.com"
 
-const NEXT_PUBLIC_PIER_MARKETPLACE="0xF2B20aD0E924ffe531E52227A8364Ec338A36358"
+const NEXT_PUBLIC_PIER_MARKETPLACE = "0xF2B20aD0E924ffe531E52227A8364Ec338A36358"
 
 async function getTokenDetails(tokenAddress) {
     const web3 = new Web3(window.ethereum);
@@ -33,10 +33,10 @@ async function book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenamount
     const web3 = new Web3(window.ethereum);
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, sellTokenInfo.address);
-    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, sellTokenAmount * (10 ** sellTokenInfo.decimals)).send({from: accounts[0]});
+    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, sellTokenAmount * (10 ** sellTokenInfo.decimals)).send({ from: accounts[0] });
 
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
-    const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
+    const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({ from: accounts[0] });
 }
 
 async function fetchSellTokenList() {
@@ -44,7 +44,7 @@ async function fetchSellTokenList() {
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
     const waiter = Number(await pierMarketplaceContract.methods.wtsListingCount().call())
     const waiterList = []
-    for (let i = 1; i <= waiter; i++) {
+    for (let i = waiter; i > 0; i--) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
         const decimals = tokenInfos[wts[0]]["decimals"]
         const seller = `${wts[1]}`
@@ -98,7 +98,7 @@ async function* fetchBookList() {
     }
 }
 
-async function fetchBook (id) {
+async function fetchBook(id) {
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE);
     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
@@ -119,14 +119,14 @@ async function fetchBook (id) {
     };
 }
 
-async function buyBook (book, percent) {
+async function buyBook(book, percent) {
     const web3 = new Web3(window.ethereum);
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, book.forTokenInfo.address);
-    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, book.forTokenAmount * (10 ** book.forTokenInfo.decimals)).send({from: accounts[0]});
+    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, book.forTokenAmount * (10 ** book.forTokenInfo.decimals)).send({ from: accounts[0] });
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
     // const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
-    const status = await pierMarketplaceContract.methods.buyToken(book.id, percent).send({from: accounts[0]})
+    const status = await pierMarketplaceContract.methods.buyToken(book.id, percent).send({ from: accounts[0] })
 }
 
 function delay(ms) {
@@ -201,14 +201,14 @@ async function fetchBookListBatch(ids) {
     return await Promise.all(bookPromises);
 }
 
-async function fetchActivity () {
+async function fetchActivity() {
     const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
     const buyTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
     // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
     const bookResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${bookTopic}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
 
     let bookActivitys = []
-    for(let item of bookResponse.data.result) {
+    for (let item of bookResponse.data.result) {
         const data = [...item.topics, ...splitInto64LengthArray(item.data)]
         const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
         const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
@@ -226,13 +226,13 @@ async function fetchActivity () {
         }
         bookActivitys.push(bookActivity)
     }
-    
+
     let buyActivitys = []
     const buyResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
-    
+
     let bookIds = []
 
-    for(let item of buyResponse.data.result) {
+    for (let item of buyResponse.data.result) {
         const data = [...item.topics, ...splitInto64LengthArray(item.data)]
         const bookId = hexToDecimal(data[1])
         const buyActivity = {
@@ -250,7 +250,7 @@ async function fetchActivity () {
     }
 
     const bookList = await fetchBookListBatch(bookIds)
-    for(let idx in buyActivitys) {
+    for (let idx in buyActivitys) {
         buyActivitys[idx].sellTokenInfo = bookList[idx].sellTokenInfo
         buyActivitys[idx].forTokenInfo = bookList[idx].forTokenInfo
         buyActivitys[idx].sellTokenAmount = buyActivitys[idx].sellTokenAmount / (10 ** bookList[idx].sellTokenInfo.decimals)

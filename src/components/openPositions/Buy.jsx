@@ -18,10 +18,10 @@ import Card from "./Card";
 //   seller: "0xffjeeedv",
 // },
 
-const Buy = () => {
+const Buy = ({ searchWord }) => {
     // const [sellTokenList, setSellTokenList] = useState([])
-
     const [bookList, setBookList] = useState([])
+    const [filteredBooks, setFilteredBooks] = useState([])
 
     async function processBooks() {
         try {
@@ -39,6 +39,32 @@ const Buy = () => {
             console.error(error); // Handle potential errors
         }
     }
+
+    const filterBooks = () => {
+        if (bookList) {
+            if (searchWord == null) {
+                console.log(searchWord, bookList)
+                setFilteredBooks([...bookList])
+            } else {
+                setFilteredBooks(
+                    bookList.filter(
+                        book => searchWord
+                            .toLowerCase()
+                            .split('')
+                            .every(
+                                letter => `${book.sellTokenAmount}${book.sellTokenInfo.symbol}${book.forTokenInfo.symbol}`
+                                    .toLowerCase()
+                                    .includes(letter)
+                            )
+                    )
+                )
+            }
+        }
+    }
+
+    useEffect(() => {
+        filterBooks()
+    }, [searchWord, bookList])
 
     useEffect(() => {
         processBooks();
@@ -86,9 +112,9 @@ const Buy = () => {
         <>
             <div className="buy-board">
                 {
-                    bookList.map((item) => {
-                        if(item.isActive)
-                            return <Card key={item.id} book={item}/>
+                    filteredBooks.map((item) => {
+                        if (item.isActive)
+                            return <Card key={`buy${item.id}`} book={item} />
                     })
                 }
                 {/* <Card />
