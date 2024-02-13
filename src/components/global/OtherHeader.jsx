@@ -6,6 +6,11 @@ import Image from "next/image";
 import { tokenInfos } from '@/utils/tokenList';
 import { networkSvgs } from '@/utils/svg';
 
+import { WalletMultiButton, setVisible, useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+
+import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
+
 const OtherHeader = () => {
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
@@ -16,6 +21,10 @@ const OtherHeader = () => {
   const [isNetworkOpen, setIsNetworkOpen] = useState(false);
   const networks = [...new Set(tokenInfos.map(token => token.network))];
   const [network, setNetwork] = useState(networks[0]);
+
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  const { setVisible } = useWalletModal();
 
   useEffect(() => {
     if (window.ethereum) {
@@ -68,6 +77,15 @@ const OtherHeader = () => {
     }
   };
 
+  const connectSolana = () => {
+      setVisible(true)
+      setIsConnected(true);
+  }
+
+  const connectSei = () => {
+    setIsConnected(true);
+  }
+
   return (
     <div className="other-header">
       <div className="container">
@@ -112,12 +130,32 @@ const OtherHeader = () => {
                     )}
                   </div>
                 </div>
-                <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
-                  {isConnected ?
-                    <span>Connected</span> :
-                    <span>Connect Wallet</span>
-                  }
-                </a>
+                {
+                  network == "Solana" ?
+                  // <WalletMultiButton /> 
+                  <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
+                    { isConnected ?
+                      <span>Connected</span> :
+                      <span>Connect Wallet</span>
+                    }
+                  </a>
+                  : (
+                    network == "Sei" ? 
+                    <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
+                      { isConnected ?
+                        <span>Connected</span> :
+                        <span><WalletConnectButton /></span>
+                      }
+                    </a>
+                    : 
+                    <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
+                      { isConnected ?
+                        <span>Connected</span> :
+                        <span>Connect Wallet</span>
+                      }
+                  </a>
+                  )
+                }
               </div>
             </div>
           </div>
