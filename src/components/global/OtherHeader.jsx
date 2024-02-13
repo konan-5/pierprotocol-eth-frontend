@@ -1,14 +1,21 @@
 import Web3 from 'web3';
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import logo from "../../assets/images/logo.png";
 import Image from "next/image";
+import { tokenInfos } from '@/utils/tokenList';
+import { networkSvgs } from '@/utils/svg';
 
 const OtherHeader = () => {
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [activeToken, setActiveToken] = useState("erc20");
   const [isConnected, setIsConnected] = useState(false);
+  const networkDropdownRef = useRef(null);
+  const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
+  const [isNetworkOpen, setIsNetworkOpen] = useState(false);
+  const networks = [...new Set(tokenInfos.map(token => token.network))];
+  const [network, setNetwork] = useState(networks[0]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -71,16 +78,39 @@ const OtherHeader = () => {
                 <Image src={logo} alt="logo" />
               </Link>
               <div className='config'>
-                <div className='token-config'>
-                  <a href="#" className={"btn-lg " + (activeToken=="erc20"? "navbar-btn": "")} onClick={() => setActiveToken("erc20")}>
+                {
+                  network == "Ethereum"&&
+                  <div className='token-config'>
+                    <a href="#" className={"btn-lg " + (activeToken == "erc20" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc20")}>
                       <span>ERC-20</span>
-                  </a>
-                  <a href="#" className={"btn-lg erc404 " + (activeToken=="erc404"? "navbar-btn": "")} onClick={() => setActiveToken("erc404")}>
+                    </a>
+                    <a href="#" className={"btn-lg erc404 " + (activeToken == "erc404" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc404")}>
                       <span>ERC-404</span>
-                  </a>
-                </div>
+                    </a>
+                  </div>
+                }
                 <div className='network-config'>
 
+                  <div ref={networkDropdownRef} className='select-network'>
+                    <div className='selected-network' onClick={networkToggleDropdown}>
+                      <div className='logo'>
+                        {networkSvgs[network]}
+                      </div>
+                      <span>{network}</span>
+                    </div>
+                    {isNetworkOpen && (
+                      <ul>
+                        {networks.map(network => (
+                          <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); }}>
+                            <div className='logo'>
+                              {networkSvgs[network]}
+                            </div>
+                            <span>{network}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
                 <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
                   {isConnected ?

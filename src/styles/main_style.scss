@@ -418,10 +418,20 @@ body {
             .btn-lg {
                 width: 130px;
                 height: 50px;
+                @media (max-width: 767.98px) {
+                    width: 100px;
+                    height: 45px;
+                    font-size: 14px;
+                }
             }
             .navbar-btn {
                 padding: 10px 15px;
                 font-size: 18px;
+                @media (max-width: 767.98px) {
+                    width: 100px;
+                    height: 45px;
+                    font-size: 14px;
+                }
             }
             display: flex;
             align-items: center;
@@ -434,10 +444,80 @@ body {
             }
         }
         .network-config {
+            margin-left: 5px;
+            .select-network {
+                position: relative;
+                .selected-network {
+                    cursor: pointer;
+                    padding: 0 10px;
+                    height: 50px;
+                    width: 170px;
+                    @media (max-width: 767.98px) {
+                        width: 150px;
+                        height: 45px;
+                    }
+                    border: 1px solid rgba(255, 255, 255, 0.15);
+                    border-radius: 30px;
+                    display: flex;
+                    align-items: center;
+                    background-color: #201f23;
+                    justify-content: center;
+                    span {
+                        font-size: 20px;
+                        @media (max-width: 767.98px) {
+                            font-size: 16px;
+                        }
+                    }
+                    .logo {
+                        // margin-left: 20px;
+                        width: 30px;
+                        height: 30px;
+                        margin-right: 5px;
+                    }
+                }
 
+                ul {
+                    width: 100%;
+                    position: absolute;
+                    border-radius: 5px;
+                    top: 60px;
+                    z-index: 1;
+
+                    li {
+                        width: 100%;
+                        cursor: pointer;
+                        padding: 10px;
+                        // margin: 5px 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        background-color: rgb(75, 70, 70);
+
+                        .logo {
+                            width: 30px;
+                            height: 30px;
+                        }
+
+                        &:first-child {
+                            border-radius: 10px 10px 0 0;
+                        }
+
+                        &:last-child {
+                            border-radius: 0 0 10px 10px;
+                        }
+
+                        &:hover {
+                            background-color: #9b9898;
+                        }
+                    }
+                }
+            }
         }
         .connect-wallet {
             margin-left: 15px;
+            @media (max-width: 767.98px) {
+                margin-left: 5px;
+            }
         }
     }
 }
