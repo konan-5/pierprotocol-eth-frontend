@@ -7,14 +7,15 @@ import Image from "next/image";
 const OtherHeader = () => {
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
+  const [activeToken, setActiveToken] = useState("erc20");
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     if (window.ethereum) {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
-      checkIfWalletIsConnected();
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      // const web3Instance = new Web3(window.ethereum);
+      // setWeb3(web3Instance);
+      // checkIfWalletIsConnected();
+      // window.ethereum.on('accountsChanged', handleAccountsChanged);
     } else {
       console.log("Please install MetaMask!");
     }
@@ -69,12 +70,25 @@ const OtherHeader = () => {
               <Link href="/">
                 <Image src={logo} alt="logo" />
               </Link>
-              <a href="#" className="btn-lg navbar-btn" onClick={connectWallet}>
-                {isConnected ?
-                  <span>Connected</span> :
-                  <span>Connect Wallet</span>
-                }
-              </a>
+              <div className='config'>
+                <div className='token-config'>
+                  <a href="#" className={"btn-lg " + (activeToken=="erc20"? "navbar-btn": "")} onClick={() => setActiveToken("erc20")}>
+                      <span>ERC-20</span>
+                  </a>
+                  <a href="#" className={"btn-lg erc404 " + (activeToken=="erc404"? "navbar-btn": "")} onClick={() => setActiveToken("erc404")}>
+                      <span>ERC-404</span>
+                  </a>
+                </div>
+                <div className='network-config'>
+
+                </div>
+                <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
+                  {isConnected ?
+                    <span>Connected</span> :
+                    <span>Connect Wallet</span>
+                  }
+                </a>
+              </div>
             </div>
           </div>
         </div>
