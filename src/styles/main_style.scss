@@ -411,6 +411,35 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .config {
+        display: flex;
+        align-items: center;
+        .token-config, .network-config {
+            .btn-lg {
+                width: 130px;
+                height: 50px;
+            }
+            .navbar-btn {
+                padding: 10px 15px;
+                font-size: 18px;
+            }
+            display: flex;
+            align-items: center;
+            border-radius: 30px;
+        }
+        .token-config {
+            background-color: #1b143b;
+            .erc404 {
+                margin-left: 10px;
+            }
+        }
+        .network-config {
+
+        }
+        .connect-wallet {
+            margin-left: 15px;
+        }
+    }
 }
 
 // *************** Banner ************** //
