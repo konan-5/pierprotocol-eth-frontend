@@ -418,10 +418,20 @@ body {
             .btn-lg {
                 width: 130px;
                 height: 50px;
+                @media (max-width: 767.98px) {
+                    width: 100px;
+                    height: 45px;
+                    font-size: 14px;
+                }
             }
             .navbar-btn {
                 padding: 10px 15px;
                 font-size: 18px;
+                @media (max-width: 767.98px) {
+                    width: 100px;
+                    height: 45px;
+                    font-size: 14px;
+                }
             }
             display: flex;
             align-items: center;
@@ -434,7 +444,7 @@ body {
             }
         }
         .network-config {
-            margin-left: 10px;
+            margin-left: 5px;
             .select-network {
                 position: relative;
                 .selected-network {
@@ -442,6 +452,10 @@ body {
                     padding: 0 10px;
                     height: 50px;
                     width: 170px;
+                    @media (max-width: 767.98px) {
+                        width: 150px;
+                        height: 45px;
+                    }
                     border: 1px solid rgba(255, 255, 255, 0.15);
                     border-radius: 30px;
                     display: flex;
@@ -450,6 +464,9 @@ body {
                     justify-content: center;
                     span {
                         font-size: 20px;
+                        @media (max-width: 767.98px) {
+                            font-size: 16px;
+                        }
                     }
                     .logo {
                         // margin-left: 20px;
@@ -498,6 +515,9 @@ body {
         }
         .connect-wallet {
             margin-left: 15px;
+            @media (max-width: 767.98px) {
+                margin-left: 5px;
+            }
         }
     }
 }
