@@ -11,7 +11,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 
 import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
 
-const OtherHeader = () => {
+const OtherHeader = ({comingSoon = false}) => {
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [activeToken, setActiveToken] = useState("erc20");
@@ -96,7 +96,7 @@ const OtherHeader = () => {
                                 <Image src={logo} alt="logo" />
                             </Link>
                             {
-                                !location.href.includes("coming-soon") &&
+                                !comingSoon &&
                                 <div className='config'>
                                     {
                                         network == "Ethereum" &&
@@ -132,24 +132,16 @@ const OtherHeader = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
-                                        {isConnected ?
-                                            <span>Connected</span> :
-                                            <span>Connect Wallet</span>
-                                        }
-                                    </a>
-                                </div>
-                            }
-                            {
-                                network == "Solana" ?
-                                    // <WalletMultiButton /> 
-                                    <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
-                                        {isConnected ?
-                                            <span>Connected</span> :
-                                            <span>Connect Wallet</span>
-                                        }
-                                    </a>
-                                    : (
+                                    {
+                                        network == "Solana" ?
+                                        // <WalletMultiButton /> 
+                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
+                                            {isConnected ?
+                                                <span>Connected</span> :
+                                                <span>Connect Wallet</span>
+                                            }
+                                        </a>
+                                        : (
                                         network == "Sei" ?
                                             <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
                                                 {isConnected ?
@@ -164,7 +156,9 @@ const OtherHeader = () => {
                                                     <span>Connect Wallet</span>
                                                 }
                                             </a>
-                                    )
+                                        )
+                                    }
+                                </div>
                             }
                         </div>
                     </div>

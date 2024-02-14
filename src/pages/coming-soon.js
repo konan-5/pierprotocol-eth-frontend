@@ -10,7 +10,7 @@ export default function List() {
         <title>Pier Protocol List</title> 
       </Head>
       <main id="other-wrapper" className='list-wrapper'>
-        <OtherHeader/>
+        <OtherHeader comingSoon={true}/>
         <ComingSoon/>
       </main>
     </>
