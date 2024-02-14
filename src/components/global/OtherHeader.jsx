@@ -92,11 +92,12 @@ const OtherHeader = ({comingSoon = false}) => {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="other-content">
-                            <Link href="/">
-                                <Image src={logo} alt="logo" />
-                            </Link>
                             {
                                 !comingSoon &&
+                                <>
+                                <Link href="/">
+                                    <Image src={logo} alt="logo" />
+                                </Link>
                                 <div className='config'>
                                     {
                                         network == "Ethereum" &&
@@ -159,6 +160,7 @@ const OtherHeader = ({comingSoon = false}) => {
                                         )
                                     }
                                 </div>
+                                </>
                             }
                         </div>
                     </div>
