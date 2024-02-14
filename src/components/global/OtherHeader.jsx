@@ -23,7 +23,7 @@ const OtherHeader = ({comingSoon = false}) => {
     const [network, setNetwork] = useState(networks[0]);
 
     const { connection } = useConnection();
-    const { publicKey, sendTransaction } = useWallet();
+    // const { publicKey, sendTransaction } = useWallet();
     const { setVisible } = useWalletModal();
 
     useEffect(() => {
