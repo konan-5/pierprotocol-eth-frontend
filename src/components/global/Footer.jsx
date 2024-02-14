@@ -19,12 +19,12 @@ const Footer = () => {
                             <div className="footer-nav">
                                 <Link href="#features">Key Features</Link>
                                 <Link href="#faq">Faq</Link>
-                                <Link href="https://pier-protocol.gitbook.io/pier-protocol/" >Gitbook</Link>
+                                <Link href="https://pier-protocol.gitbook.io/pier-protocol/" target="_blank">Gitbook</Link>
                             </div>
                             <div className="footer-social">
-                                <Link href="https://twitter.com/protocolpier"><TwitterIcon/></Link>
-                                <Link href=""><DiscordIcon/></Link>
-                                <Link href=""><EvenoddIcon/></Link>
+                                <Link href="https://twitter.com/protocolpier" target="_blank"><TwitterIcon/></Link>
+                                {/* <Link href=""><DiscordIcon/></Link> */}
+                                <Link href="https://t.me/" target="_blank"><EvenoddIcon/></Link>
                             </div>
                         </div>
                     </div>
