@@ -1,6 +1,6 @@
 import OtherHeader from '@/components/global/OtherHeader'
 import Head from 'next/head'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react'
 import { networkSvgs } from '@/utils/svg';
 import { tokenInfos } from '@/utils/tokenList';

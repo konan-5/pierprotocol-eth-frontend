@@ -1,6 +1,6 @@
 import OtherHeader from '@/components/global/OtherHeader'
 import Head from 'next/head'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ProgressBar from '@/components/buy/ProgressiveBar'
 import { useRouter as nextUseRouter } from "next/router";

@@ -21,7 +21,9 @@ const OtherHeader = ({comingSoon = false}) => {
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
     const networks = [...new Set(tokenInfos.map(token => token.network))];
     const [network, setNetwork] = useState(networks[0]);
-
+    
+    const { seiConnectedWallet, seiAccounts } = useWallet();
+    
     const { connection } = useConnection();
     // const { publicKey, sendTransaction } = useWallet();
     const { setVisible } = useWalletModal();
@@ -78,12 +80,12 @@ const OtherHeader = ({comingSoon = false}) => {
     };
 
     const connectSolana = () => {
-        setVisible(true)
-        setIsConnected(true);
+        // setVisible(true)
+        // setIsConnected(true);
     }
 
     const connectSei = () => {
-        setIsConnected(true);
+        // setIsConnected(true);
     }
 
     return (
@@ -145,15 +147,15 @@ const OtherHeader = ({comingSoon = false}) => {
                                         : (
                                         network == "Sei" ?
                                             <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
-                                                {isConnected ?
+                                                {seiConnectedWallet ?
                                                     <span>Connected</span> :
-                                                    <span><WalletConnectButton /></span>
+                                                    <span style={{fontSize: "18px", fontWeight: "bolder"}}><WalletConnectButton /></span>
                                                 }
                                             </a>
                                             :
                                             <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
                                                 {isConnected ?
-                                                    <span>Connected</span> :
+                                                    <span>{`${accounts.toString().substr(0,3)}...${accounts.toString().substr(-5)}`}</span> :
                                                     <span>Connect Wallet</span>
                                                 }
                                             </a>
