@@ -4,6 +4,7 @@ import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
 import { fetchBookList, fetchSellTokenList } from "@/utils/web3helper";
 import Card from "./Card";
+import { useSelector, useDispatch } from "react-redux";
 
 // {
 //   id: 7,
@@ -20,6 +21,7 @@ import Card from "./Card";
 
 const Buy = ({ searchWord }) => {
     // const [sellTokenList, setSellTokenList] = useState([])
+    const network = useSelector((state) => state.app.network);
     const [bookList, setBookList] = useState([])
     const [filteredBooks, setFilteredBooks] = useState([])
 
@@ -43,11 +45,10 @@ const Buy = ({ searchWord }) => {
     const filterBooks = () => {
         if (bookList) {
             if (searchWord == null) {
-                console.log(searchWord, bookList)
-                setFilteredBooks([...bookList])
+                setFilteredBooks([...bookList.filter((book) => {console.log(book.forTokenInfo.network, network, 11111111); return book.forTokenInfo.network == network})])
             } else {
                 setFilteredBooks(
-                    bookList.filter(
+                    bookList.filter((book) => {return book.forTokenInfo.network == network}).filter(
                         book => searchWord
                             .toLowerCase()
                             .split('')
@@ -64,7 +65,7 @@ const Buy = ({ searchWord }) => {
 
     useEffect(() => {
         filterBooks()
-    }, [searchWord, bookList])
+    }, [searchWord, bookList, network])
 
     useEffect(() => {
         processBooks();
