@@ -9,6 +9,17 @@ const providerInfo = {
     "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc"
 }
 
+const scanApiInfo = {
+    "Optimism": {
+        "endpoint": "https://api-optimistic.etherscan.io/api",
+        "key": "W2FDXKHSX9PHEUYEUYV2FKPTJBM5C6FQ5V"
+    },
+    "Ethereum": {
+        "endpoint": "https://api.etherscan.io/api",
+        "key": "KR5PMG4YFWFZJ997G8RKJA94YCFF2EBT8R",
+    }
+}
+
 const NEXT_PUBLIC_PIER_MARKETPLACE = "0x9ed4c32F668C2b0bA9F61F56d5DB106E6F687AD2"
 
 async function getTokenDetails(tokenAddress) {
@@ -209,13 +220,13 @@ async function fetchBookListBatch(ids, network) {
     return await Promise.all(bookPromises);
 }
 
-async function fetchActivity() {
-    try {
+async function fetchActivity(network) {
+    // try {
 
         const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
         const buyTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
         // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
-        const bookResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${bookTopic}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
+        const bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${bookTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
 
         let bookActivitys = []
         for (let item of bookResponse.data.result) {
@@ -238,8 +249,9 @@ async function fetchActivity() {
         }
 
         let buyActivitys = []
-        const buyResponse = await axios.get(`https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=DC9U8H98KD6RSX4YP4EBIA74HGP64FDZ42`)
-
+        console.log(11111111111)
+        const buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+        console.log(buyResponse.data.result, 2222222222222)
         let bookIds = []
 
         for (let item of buyResponse.data.result) {
@@ -259,7 +271,7 @@ async function fetchActivity() {
             bookIds.push(bookId)
         }
 
-        const bookList = await fetchBookListBatch(bookIds)
+        const bookList = await fetchBookListBatch(bookIds, network)
         for (let idx in buyActivitys) {
             buyActivitys[idx].sellTokenInfo = bookList[idx].sellTokenInfo
             buyActivitys[idx].forTokenInfo = bookList[idx].forTokenInfo
@@ -268,11 +280,13 @@ async function fetchActivity() {
         }
 
         const activitys = [...bookActivitys, ...buyActivitys]
+        console.log(activitys)
 
         return activitys.sort((a, b) => b.unixTime - a.unixTime)
-    } catch (error) {
-        return []
-    }
+    // } catch (error) {
+    //     console.log(error)
+    //     return []
+    // }
 }
 
 export { getTokenDetails, orderTokenForSell, fetchSellTokenList, book, fetchBookList, fetchBook, buyBook, fetchActivity }
