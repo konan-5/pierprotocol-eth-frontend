@@ -3,9 +3,10 @@ import { ERC20, PierMarketplace } from './abi';
 import { tokenInfos } from './tokenList';
 import axios from 'axios';
 
-const provider = "https://ethereum-sepolia.publicnode.com"
+// const provider = "https://ethereum-sepolia.publicnode.com"
+const provider = "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17"
 
-const NEXT_PUBLIC_PIER_MARKETPLACE = "0xF2B20aD0E924ffe531E52227A8364Ec338A36358"
+const NEXT_PUBLIC_PIER_MARKETPLACE = "0x9ed4c32F668C2b0bA9F61F56d5DB106E6F687AD2"
 
 async function getTokenDetails(tokenAddress) {
     const web3 = new Web3(window.ethereum);
@@ -82,8 +83,8 @@ async function* fetchBookList() {
 
     for (let i = 1; i <= bookCount; i++) {
         const book = await pierMarketplaceContract.methods.bookList(i).call();
-        const sellTokenInfo = tokenInfos.find((item) => item.address === book[1]);
-        const forTokenInfo = tokenInfos.find((item) => item.address === book[3]);
+        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
         // Use `yield` to return each book's data immediately
         yield {
@@ -179,8 +180,8 @@ async function fetchBookListBatch(ids) {
     // Create a promise for each book fetch operation
     const bookPromises = ids.map(async (id) => {
         const book = await pierMarketplaceContract.methods.bookList(id).call();
-        const sellTokenInfo = tokenInfos.find((item) => item.address === book[1]);
-        const forTokenInfo = tokenInfos.find((item) => item.address === book[3]);
+        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
         // Calculate token amounts considering their decimals
         const sellTokenAmount = Number(book[2]) / (10 ** sellTokenInfo.decimals);

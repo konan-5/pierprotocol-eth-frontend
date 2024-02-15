@@ -23,6 +23,30 @@ const tokenInfos = [
         decimals: 18,
         logo: "../assets/images/tokens/dai.png"
     },
+    {
+        network: "Optimism",
+        address: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+        name: "Tether USD",
+        symbol: "USDT",
+        decimals: 6,
+        logo: "../assets/images/tokens/usdt.png"
+    },
+    {
+        network: "Optimism",
+        address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+        name: "USD Coin",
+        symbol: "USDC",
+        decimals: 6,
+        logo: "../assets/images/tokens/usdc.png"
+    },
+    {
+        network: "Optimism",
+        address: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+        name: "Dai Stablecoin",
+        symbol: "DAI",
+        decimals: 18,
+        logo: "../assets/images/tokens/dai.png"
+    },
     // {
     //     network: "Ethereum",
     //     address: "0x90A4033F72825Cdc71F07236A6eE52f7Fb5C9adf",
