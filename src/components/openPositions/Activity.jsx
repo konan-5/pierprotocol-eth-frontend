@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import Bitcoin from "../../assets/images/bitcoin-ic.svg";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import Image from "next/image";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchActivity } from "@/utils/web3helper";
 
 const Activity = ({ searchWord }) => {
+    const network = useSelector((state) => state.app.network);
     const [activitys, setActivitys] = useState();
     const [filteredActivitys, setFilteredActivitys] = useState();
     async function init() {
-        const activitys = await fetchActivity()
+        const activitys = await fetchActivity(network)
         setActivitys(activitys)
     }
 
@@ -36,11 +38,12 @@ const Activity = ({ searchWord }) => {
     useEffect(() => {
         console.log(searchWord, activitys)
         filterActivitys()
-    }, [searchWord, activitys])
+    }, [searchWord, activitys, network])
 
     useEffect(() => {
+        console.log(network)
         init()
-    }, [])
+    }, [network])
 
     // const [order, setOrder] = useState("ASC");
     // const [buyData, setBuyData] = useState([
