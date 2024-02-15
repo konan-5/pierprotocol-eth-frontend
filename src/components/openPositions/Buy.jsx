@@ -65,7 +65,7 @@ const Buy = ({ searchWord }) => {
 
     useEffect(() => {
         filterBooks()
-    }, [searchWord, bookList, network])
+    }, [searchWord, bookList])
 
     useEffect(() => {
         setBookList([])
