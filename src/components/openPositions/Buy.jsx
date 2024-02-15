@@ -68,7 +68,9 @@ const Buy = ({ searchWord }) => {
     }, [searchWord, bookList, network])
 
     useEffect(() => {
+        setBookList([])
         processBooks();
+        console.log(bookList)
     }, [network]);
 
     const [order, setOrder] = useState("ASC");
