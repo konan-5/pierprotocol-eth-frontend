@@ -5,7 +5,8 @@ const initialState = {
   sellList: [],
   counter: 0,
   toggle: false,
-  text: ''
+  text: '',
+  network: "Ethereum",
 };
 
 const appReducer = (state = initialState, action) => {
@@ -22,6 +23,8 @@ const appReducer = (state = initialState, action) => {
       return {...state, sellList: [...state.sellList, action.payload]};
     case 'REMOVE_SELL_LIST':
       return { ...state, sellList: state.sellList.filter(item => item !== action.payload) };
+    case 'SET_NETWORK':
+      return {...state, network: action.payload}
     default:
       return state;
   }

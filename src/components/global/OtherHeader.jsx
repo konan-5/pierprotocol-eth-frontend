@@ -9,9 +9,12 @@ import { networkSvgs } from '@/utils/svg';
 import { WalletMultiButton, setVisible, useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 
+
 import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const OtherHeader = ({comingSoon = false}) => {
+    const dispatch = useDispatch();
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [activeToken, setActiveToken] = useState("erc20");
@@ -20,9 +23,16 @@ const OtherHeader = ({comingSoon = false}) => {
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
     const networks = [...new Set(tokenInfos.map(token => token.network))];
-    const [network, setNetwork] = useState(networks[0]);
+    // const [network, setNetwork] = useState(networks[0]);
+    const network = useSelector((state) => state.app.network);
     
     const { seiConnectedWallet, seiAccounts } = useWallet();
+
+    const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
+
+    useEffect(() => {
+        console.log(network)
+    }, [network])
     
     const { connection } = useConnection();
     // const { publicKey, sendTransaction } = useWallet();

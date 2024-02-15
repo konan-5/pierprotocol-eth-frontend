@@ -105,8 +105,8 @@ async function fetchBook(id) {
     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
 
     const book = await pierMarketplaceContract.methods.bookList(id).call();
-    const sellTokenInfo = tokenInfos.find((item) => item.address === book[1]);
-    const forTokenInfo = tokenInfos.find((item) => item.address === book[3]);
+    const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+    const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
     // Use `yield` to return each book's data immediately
     return {
