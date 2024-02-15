@@ -7,8 +7,11 @@ import { useRouter as nextUseRouter } from "next/router";
 import { buyBook, fetchBook } from '@/utils/web3helper'
 import ProgressCircle from '@/components/buy/ProgressiveCircle'
 import Web3 from 'web3';
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Buy() {
+    const network = useSelector((state) => state.app.network);
+
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
@@ -92,7 +95,7 @@ export default function Buy() {
 
     useEffect(() => {
         const fetch = async () => {
-            setBook(await fetchBook(id))
+            setBook(await fetchBook(id, network))
         }
         if (id)
             fetch()

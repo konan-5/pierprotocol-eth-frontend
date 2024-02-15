@@ -27,7 +27,7 @@ const Buy = ({ searchWord }) => {
 
     async function processBooks() {
         try {
-            for await (const bookData of fetchBookList()) {
+            for await (const bookData of fetchBookList(network)) {
                 setBookList(currentBooks => {
                     const isExisting = currentBooks.some(book => book.id === bookData.id);
                     if (!isExisting) {
@@ -69,7 +69,7 @@ const Buy = ({ searchWord }) => {
 
     useEffect(() => {
         processBooks();
-    }, []);
+    }, [network]);
 
     const [order, setOrder] = useState("ASC");
     const [buyData, setBuyData] = useState([]);
