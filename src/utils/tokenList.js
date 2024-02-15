@@ -47,30 +47,30 @@ const tokenInfos = [
     //     decimals: 18,
     //     logo: "../assets/images/tokens/Aave.png"
     // },
-    {
-        network: "Solana",
-        address: "0xF653901f43a5deD57F146e3fDd785a0f41Bd1176",
-        name: "T*USDC",
-        symbol: "USDC",
-        decimals: 18,
-        logo: "../assets/images/tokens/usdc.png"
-    },
-    {
-        network: "Solana",
-        address: "0x9EbF97EA45Ae4Bb9C76E78740f93548AeA85409B",
-        name: "T*USDT",
-        symbol: "USDT",
-        decimals: 18,
-        logo: "../assets/images/tokens/usdt.png"
-    },
-    {
-        network: "Solana",
-        address: "0x581BD825AF66Db5AA10bb68933f1a6f030BfF3c3",
-        name: "T*DAI",
-        symbol: "DAI",
-        decimals: 18,
-        logo: "../assets/images/tokens/dai.png"
-    },
+    // {
+    //     network: "Solana",
+    //     address: "0xF653901f43a5deD57F146e3fDd785a0f41Bd1176",
+    //     name: "T*USDC",
+    //     symbol: "USDC",
+    //     decimals: 18,
+    //     logo: "../assets/images/tokens/usdc.png"
+    // },
+    // {
+    //     network: "Solana",
+    //     address: "0x9EbF97EA45Ae4Bb9C76E78740f93548AeA85409B",
+    //     name: "T*USDT",
+    //     symbol: "USDT",
+    //     decimals: 18,
+    //     logo: "../assets/images/tokens/usdt.png"
+    // },
+    // {
+    //     network: "Solana",
+    //     address: "0x581BD825AF66Db5AA10bb68933f1a6f030BfF3c3",
+    //     name: "T*DAI",
+    //     symbol: "DAI",
+    //     decimals: 18,
+    //     logo: "../assets/images/tokens/dai.png"
+    // },
     {
         network: "Sei",
         address: "0xF653901f43a5deD57F146e3fDd785a0f41Bd1176",
