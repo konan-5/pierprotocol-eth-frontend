@@ -23,7 +23,7 @@ const Banner = () => {
               </p>
               <div className="d-flex justify-content-center gap-4">
                 <Link className="banner-btn-lg btn-gray" href="/dashboard">LAUNCH APP</Link>
-                <Link className="banner-btn-lg" href="/coming-soon">Buy $PIER</Link>
+                <Link className="banner-btn-lg" href="https://www.dextools.io/app/en/ether/pair-explorer/0xb5b76eaf190c1b8a4dae62f73139f1955b5ec18a?t=1708074692009" target="_blank">Buy $PIER</Link>
               </div>
             </div>
           </div>
