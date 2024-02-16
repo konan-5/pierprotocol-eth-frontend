@@ -114,7 +114,7 @@ async function* fetchBookList(network) {
             sellTokenInfo: sellTokenInfo,
             forTokenInfo: forTokenInfo,
             sellTokenAmount: Number(book[2]) / (10 ** sellTokenInfo.decimals),
-            forTokenAmount: Number(book[4]) / (10 ** sellTokenInfo.decimals),
+            forTokenAmount: Number(book[4]) / (10 ** forTokenInfo.decimals),
             isActive: book[5],
         };
     }
@@ -137,7 +137,7 @@ async function fetchBook(id, network) {
         sellTokenInfo: sellTokenInfo,
         forTokenInfo: forTokenInfo,
         sellTokenAmount: Number(book[2]) / (10 ** sellTokenInfo.decimals),
-        forTokenAmount: Number(book[4]) / (10 ** sellTokenInfo.decimals),
+        forTokenAmount: Number(book[4]) / (10 ** forTokenInfo.decimals),
         isActive: book[5],
     };
 }

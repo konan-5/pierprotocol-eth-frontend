@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const Card = ({ book }) => {
-    
+    console.log(book, 'dddddddddddd')
     const router = useRouter();
     const [tokenPrice, setTokenPrice] = useState(null);
     const fetchData = async () => {
