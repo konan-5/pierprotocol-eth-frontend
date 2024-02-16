@@ -24,7 +24,7 @@ const Footer = () => {
                             <div className="footer-social">
                                 <Link href="https://twitter.com/protocolpier" target="_blank"><TwitterIcon/></Link>
                                 {/* <Link href=""><DiscordIcon/></Link> */}
-                                <Link href="https://t.me/" target="_blank"><EvenoddIcon/></Link>
+                                <Link href="https://t.me/PierProtocolERC" target="_blank"><EvenoddIcon/></Link>
                             </div>
                         </div>
                     </div>
