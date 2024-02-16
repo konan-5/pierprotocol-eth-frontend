@@ -38,10 +38,11 @@ const Activity = ({ searchWord }) => {
     useEffect(() => {
         console.log(searchWord, activitys)
         filterActivitys()
-    }, [searchWord, activitys, network])
+    }, [searchWord, activitys])
 
     useEffect(() => {
         console.log(network)
+        setActivitys([])
         init()
     }, [network])
 

@@ -6,7 +6,8 @@ import axios from 'axios';
 // const provider = "https://ethereum-sepolia.publicnode.com"
 const providerInfo = {
     "Optimism": "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17",
-    "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc"
+    "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc",
+    "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag"
 }
 
 const scanApiInfo = {
@@ -17,6 +18,10 @@ const scanApiInfo = {
     "Ethereum": {
         "endpoint": "https://api.etherscan.io/api",
         "key": "KR5PMG4YFWFZJ997G8RKJA94YCFF2EBT8R",
+    },
+    "Base": {
+        "endpoint": "https://api.basescan.org/api",
+        "key": "T7MNKDRXM77S6TAW25XHQB4VNXITZR4R1Z"
     }
 }
 
