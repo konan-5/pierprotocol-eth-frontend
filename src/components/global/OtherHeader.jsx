@@ -22,6 +22,7 @@ const OtherHeader = ({comingSoon = false}) => {
     const networkDropdownRef = useRef(null);
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
+
     const networks = [...new Set(tokenInfos.map(token => token.network))];
     // const [network, setNetwork] = useState(networks[0]);
     const network = useSelector((state) => state.app.network);

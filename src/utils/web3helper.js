@@ -7,11 +7,16 @@ import axios from 'axios';
 const providerInfo = {
     "Optimism": "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17",
     "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc",
+    "Arbitrum": "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17",
     "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag"
 }
 
 const scanApiInfo = {
     "Optimism": {
+        "endpoint": "https://api-optimistic.etherscan.io/api",
+        "key": "W2FDXKHSX9PHEUYEUYV2FKPTJBM5C6FQ5V"
+    },
+    "Arbitrum": {
         "endpoint": "https://api-optimistic.etherscan.io/api",
         "key": "W2FDXKHSX9PHEUYEUYV2FKPTJBM5C6FQ5V"
     },

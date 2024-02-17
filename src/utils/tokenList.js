@@ -48,6 +48,22 @@ const tokenInfos = [
         logo: "../assets/images/tokens/dai.png"
     },
     {
+        network: "Arbitrum",
+        address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+        name: "USD Coin",
+        symbol: "USDC",
+        decimals: 6,
+        logo: "../assets/images/tokens/usdc.png"
+    },
+    {
+        network: "Arbitrum",
+        address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+        name: "Dai Stablecoin",
+        symbol: "DAI",
+        decimals: 18,
+        logo: "../assets/images/tokens/dai.png"
+    },
+    {
         network: "Base",
         address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
         name: "USD Coin",
