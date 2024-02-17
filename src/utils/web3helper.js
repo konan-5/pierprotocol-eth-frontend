@@ -7,7 +7,7 @@ import axios from 'axios';
 const providerInfo = {
     "Optimism": "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17",
     "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc",
-    "Arbitrum": "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17",
+    "Arbitrum": "https://arb-mainnet.g.alchemy.com/v2/EG83x-cSn3_otO7KBnqnG0ws3mt5fnLP",
     "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag"
 }
 
@@ -17,8 +17,8 @@ const scanApiInfo = {
         "key": "W2FDXKHSX9PHEUYEUYV2FKPTJBM5C6FQ5V"
     },
     "Arbitrum": {
-        "endpoint": "https://api-optimistic.etherscan.io/api",
-        "key": "W2FDXKHSX9PHEUYEUYV2FKPTJBM5C6FQ5V"
+        "endpoint": "https://api.arbiscan.io/api",
+        "key": "YA4NWMCW91HWUFYY8BP6FJYP1ES594SPHH"
     },
     "Ethereum": {
         "endpoint": "https://api.etherscan.io/api",
