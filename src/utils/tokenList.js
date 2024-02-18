@@ -23,6 +23,7 @@ const tokenInfos = [
         decimals: 18,
         logo: "../assets/images/tokens/dai.png"
     },
+
     {
         network: "Optimism",
         address: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
@@ -72,6 +73,30 @@ const tokenInfos = [
         logo: "../assets/images/tokens/dai.png"
     },
     {
+        network: "ZkSync",
+        address: "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C",
+        name: "Tether USD",
+        symbol: "USDT",
+        decimals: 6,
+        logo: "../assets/images/tokens/usdt.png"
+    },
+    {
+        network: "ZkSync",
+        address: "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4",
+        name: "USD Coin",
+        symbol: "USDC",
+        decimals: 6,
+        logo: "../assets/images/tokens/usdc.png"
+    },
+    {
+        network: "ZkSync",
+        address: "0x4B9eb6c0b6ea15176BBF62841C6B2A8a398cb656",
+        name: "Dai Stablecoin",
+        symbol: "DAI",
+        decimals: 18,
+        logo: "../assets/images/tokens/dai.png"
+    },
+    {
         network: "Base",
         address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
         name: "USD Coin",
@@ -87,6 +112,7 @@ const tokenInfos = [
         decimals: 18,
         logo: "../assets/images/tokens/dai.png"
     },
+
     // {
     //     network: "Ethereum",
     //     address: "0x90A4033F72825Cdc71F07236A6eE52f7Fb5C9adf",

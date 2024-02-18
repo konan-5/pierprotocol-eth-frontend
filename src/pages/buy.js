@@ -84,7 +84,7 @@ export default function Buy() {
         if (!isConnected) {
             await connectWallet()
         }
-        await buyBook(book, percent)
+        await buyBook(book, percent, network)
         router.push("/dashboard")
     }
 

@@ -1,4 +1,5 @@
 import arbLogo from "../assets/images/promo-4.png";
+import zkSyncLogo from "../assets/images/promo-7.svg";
 
 export const networkSvgs = {
     "Solana": <svg width="100%" height="100%" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +41,7 @@ export const networkSvgs = {
     </svg>,
     "Optimism":<img src="assets/images/promo-5.png" width={"100%"}/>,
     "Arbitrum":<img src={arbLogo.src} width={"100%"} />,
+    "ZkSync":<img src={zkSyncLogo.src} width={"100%"} />,
     "Base":<img src="assets/images/promo-6.png" width={"100%"} />
 
 }

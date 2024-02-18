@@ -2,16 +2,22 @@ import Web3 from 'web3';
 import { ERC20, PierMarketplace } from './abi';
 import { tokenInfos } from './tokenList';
 import axios from 'axios';
+import {useSelector} from "react-redux";
 
 // const provider = "https://ethereum-sepolia.publicnode.com"
 const providerInfo = {
     "Optimism": "https://opt-mainnet.g.alchemy.com/v2/nRz4mGrUbXWEm_tTKlIFbxcn3KCqIO17",
     "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc",
     "Arbitrum": "https://arb-mainnet.g.alchemy.com/v2/EG83x-cSn3_otO7KBnqnG0ws3mt5fnLP",
-    "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag"
+    "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag",
+    "ZkSync": "https://mainnet.era.zksync.io"
 }
 
 const scanApiInfo = {
+    "ZkSync": {
+        "endpoint": "https://block-explorer-api.mainnet.zksync.io/api",
+        "key": ""
+    },
     "Optimism": {
         "endpoint": "https://api-optimistic.etherscan.io/api",
         "key": "W2FDXKHSX9PHEUYEUYV2FKPTJBM5C6FQ5V"
@@ -31,6 +37,23 @@ const scanApiInfo = {
 }
 
 const NEXT_PUBLIC_PIER_MARKETPLACE = "0x9ed4c32F668C2b0bA9F61F56d5DB106E6F687AD2"
+const NEXT_PUBLIC_PIER_MARKETPLACE_ZKSYNC = "0xD47DBfc9553321AD8E2A4F8B4c5D919540DCD92e"
+
+const getMarketplaceAddress = (network) => {
+
+    console.log("get Markerplace address for: ", network);
+    switch (network) {
+        case "Ethereum":
+            return NEXT_PUBLIC_PIER_MARKETPLACE
+        case "ZkSync":
+            return NEXT_PUBLIC_PIER_MARKETPLACE_ZKSYNC
+        default:
+            return NEXT_PUBLIC_PIER_MARKETPLACE
+    }
+
+}
+
+
 
 async function getTokenDetails(tokenAddress) {
     const web3 = new Web3(window.ethereum);
@@ -43,31 +66,31 @@ async function getTokenDetails(tokenAddress) {
     return [name, symbol, balance]
 }
 
-async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei) {
+async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei, network) {
     const web3 = new Web3(window.ethereum);
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, tokenAddress);
     const decimals = Number(await tokenContract.methods.decimals().call());
-    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, tokenAmountToSell * (10 ** decimals)).send({ from: accounts[0] });
+    const response = await tokenContract.methods.approve(getMarketplaceAddress(network), tokenAmountToSell * (10 ** decimals)).send({ from: accounts[0] });
 
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network))
     const listStatus = await pierMarketplaceContract.methods.listTokenForSale(tokenAddress, tokenAmountToSell * (10 ** decimals), sellPriceInWei * (10 ** 18), accounts[0]).send({ from: accounts[0] })
 }
 
-async function book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenamount) {
+async function book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenamount, network) {
     const web3 = new Web3(window.ethereum);
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, sellTokenInfo.address);
-    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, sellTokenAmount * (10 ** sellTokenInfo.decimals)).send({ from: accounts[0] });
+    const response = await tokenContract.methods.approve(getMarketplaceAddress(network), sellTokenAmount * (10 ** sellTokenInfo.decimals)).send({ from: accounts[0] });
 
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network))
     const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({ from: accounts[0] });
 }
 
 async function fetchSellTokenList(network) {
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network))
     const waiter = Number(await pierMarketplaceContract.methods.wtsListingCount().call())
     const waiterList = []
     for (let i = waiter; i > 0; i--) {
@@ -102,9 +125,10 @@ async function fetchSellTokenList(network) {
 // }
 
 async function* fetchBookList(network) {
+    console.log("network: ", getMarketplaceAddress(network));
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
 
     for (let i = 1; i <= bookCount; i++) {
@@ -128,7 +152,7 @@ async function* fetchBookList(network) {
 async function fetchBook(id, network) {
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
 
     const book = await pierMarketplaceContract.methods.bookList(id).call();
@@ -147,12 +171,12 @@ async function fetchBook(id, network) {
     };
 }
 
-async function buyBook(book, percent) {
+async function buyBook(book, percent, network) {
     const web3 = new Web3(window.ethereum);
     const accounts = await web3.eth.getAccounts();
     const tokenContract = new web3.eth.Contract(ERC20, book.forTokenInfo.address);
-    const response = await tokenContract.methods.approve(NEXT_PUBLIC_PIER_MARKETPLACE, book.forTokenAmount * (10 ** book.forTokenInfo.decimals)).send({ from: accounts[0] });
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE)
+    const response = await tokenContract.methods.approve(getMarketplaceAddress(network), book.forTokenAmount * (10 ** book.forTokenInfo.decimals)).send({ from: accounts[0] });
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network))
     // const status = await pierMarketplaceContract.methods.book(sellTokenInfo.address, sellTokenAmount * (10 ** sellTokenInfo.decimals), forTokenInfo.address, forTokenamount * (10 ** forTokenInfo.decimals)).send({from: accounts[0]});
     const status = await pierMarketplaceContract.methods.buyToken(book.id, percent).send({ from: accounts[0] })
 }
@@ -203,7 +227,7 @@ function hexToDateTime(hexString) {
 async function fetchBookListBatch(ids, network) {
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
-    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, NEXT_PUBLIC_PIER_MARKETPLACE);
+    const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
 
     // Create a promise for each book fetch operation
     const bookPromises = ids.map(async (id) => {
@@ -232,15 +256,29 @@ async function fetchBookListBatch(ids, network) {
 
 async function fetchActivity(network) {
     // try {
-
+    console.log("network: ", getMarketplaceAddress(network));
         const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
         const buyTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
         // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
-        const bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${bookTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+        let bookResponse = null;
+        if (network === "ZkSync") {
+            bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&page=1&offset=1000`)
+            //filter only bookResponse.data.result only if topics includes bookTopic
+            bookResponse = {
+                data: {
+                    result: bookResponse.data.result.filter((item) => item.topics.includes(bookTopic))
+                }
+            };
+        } else {
+            bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&topic0=${bookTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+        }
 
         let bookActivitys = []
         for (let item of bookResponse.data.result) {
             const data = [...item.topics, ...splitInto64LengthArray(item.data)]
+            if(data.length < 5) {
+                continue;
+            }
             const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
             const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
             const bookActivity = {
@@ -260,7 +298,18 @@ async function fetchActivity(network) {
 
         let buyActivitys = []
         console.log(11111111111)
-        const buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+        let buyResponse = null;
+        if (network === "ZkSync") {
+            buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&page=1&offset=1000`)
+            buyResponse = {
+                data: {
+                    result: bookResponse.data.result.filter((item) => item.topics.includes(buyTopic))
+                }
+            };
+        } else {
+            buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+        }
+        //const buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
         console.log(buyResponse.data.result, 2222222222222)
         let bookIds = []
 

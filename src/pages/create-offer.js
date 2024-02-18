@@ -117,7 +117,7 @@ export default function CreateOffer() {
             const sellTokenInfo = tokens.find(item => item.symbol == sellingToken)
             const forTokenInfo = tokens.find(item => item.symbol == forToken)
             console.log(network, sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
-            await book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
+            await book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount, network)
             router.push("/dashboard")
         } catch {
 
