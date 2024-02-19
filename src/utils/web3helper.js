@@ -10,7 +10,8 @@ const providerInfo = {
     "Ethereum": "https://eth-mainnet.g.alchemy.com/v2/xRpnmvup4LCr2mL9lNqqpKnHQJepfeSc",
     "Arbitrum": "https://arb-mainnet.g.alchemy.com/v2/EG83x-cSn3_otO7KBnqnG0ws3mt5fnLP",
     "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag",
-    "ZkSync": "https://mainnet.era.zksync.io"
+    "ZkSync": "https://mainnet.era.zksync.io",
+    "Scroll": "",
 }
 
 const scanApiInfo = {
@@ -33,6 +34,10 @@ const scanApiInfo = {
     "Base": {
         "endpoint": "https://api.basescan.org/api",
         "key": "T7MNKDRXM77S6TAW25XHQB4VNXITZR4R1Z"
+    },
+    "Scroll": {
+        "endpoint": "https://api.scrollscan.com/api",
+        "key": "MDDVVBGY7QFY6D34EB9P7DSGXAVS5SRDVY"
     }
 }
 
