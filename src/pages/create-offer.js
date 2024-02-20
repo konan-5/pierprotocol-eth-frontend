@@ -70,8 +70,8 @@ export default function CreateOffer() {
     }, []);
 
     const saveUpdateToken = (tokenInfo, tokenAddress) => {
-        let localTokenInfos = JSON.parse(localStorage.getItem["tokenInfo"])
-        if (localTokenInfos) {
+        if (localStorage.getItem["tokenInfo"]) {
+            let localTokenInfos = JSON.parse(localStorage.getItem["tokenInfo"])
             if (!localTokenInfos.findIndex((a) => a.address == tokenAddress))
                 localStorage.setItem("tokenInfo", JSON.stringify([{
                     network,

@@ -135,6 +135,7 @@ async function fetchSellTokenList(network) {
 
 async function* fetchBookList(network) {
     console.log("network: ", getMarketplaceAddress(network));
+    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -142,8 +143,8 @@ async function* fetchBookList(network) {
 
     for (let i = 1; i <= bookCount; i++) {
         const book = await pierMarketplaceContract.methods.bookList(i).call();
-        const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
-        const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
+        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
         // Use `yield` to return each book's data immediately
         yield {
@@ -159,14 +160,15 @@ async function* fetchBookList(network) {
 }
 
 async function fetchBook(id, network) {
+    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
 
     const book = await pierMarketplaceContract.methods.bookList(id).call();
-    const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
-    const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
+    const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+    const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
     // Use `yield` to return each book's data immediately
     return {
@@ -234,6 +236,7 @@ function hexToDateTime(hexString) {
 }
 
 async function fetchBookListBatch(ids, network) {
+    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -241,8 +244,8 @@ async function fetchBookListBatch(ids, network) {
     // Create a promise for each book fetch operation
     const bookPromises = ids.map(async (id) => {
         const book = await pierMarketplaceContract.methods.bookList(id).call();
-        const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
-        const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
+        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
         // Calculate token amounts considering their decimals
         const sellTokenAmount = Number(book[2]) / (10 ** sellTokenInfo.decimals);
@@ -264,6 +267,7 @@ async function fetchBookListBatch(ids, network) {
 }
 
 async function fetchActivity(network) {
+    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
     // try {
     console.log("network: ", getMarketplaceAddress(network));
         const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
@@ -288,8 +292,8 @@ async function fetchActivity(network) {
             if(data.length < 5) {
                 continue;
             }
-            const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
-            const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
+            const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
+            const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
             const bookActivity = {
                 category: 'book',
                 bookId: hexToDecimal(data[1]),
