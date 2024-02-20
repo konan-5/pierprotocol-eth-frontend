@@ -8,12 +8,12 @@ import { networkSvgs } from '@/utils/svg';
 
 import { WalletMultiButton, setVisible, useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-
+import { networkConfig } from '@/utils/networkConfig';
 
 import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const OtherHeader = ({comingSoon = false}) => {
+const OtherHeader = ({ comingSoon = false }) => {
     const dispatch = useDispatch();
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
@@ -26,15 +26,45 @@ const OtherHeader = ({comingSoon = false}) => {
     const networks = [...new Set(tokenInfos.map(token => token.network))];
     // const [network, setNetwork] = useState(networks[0]);
     const network = useSelector((state) => state.app.network);
-    
+
     const { seiConnectedWallet, seiAccounts } = useWallet();
 
     const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
+    const switchNetwork = async () => {
+        try {
+            // Check if MetaMask is installed
+            if (window.ethereum) {
+                // Try to switch to the desired network
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: networkConfig[network].chainId }], // Use the chainId from the networkConfig
+                });
+            } else {
+                console.log('MetaMask is not installed!');
+            }
+        } catch (switchError) {
+            // This error code indicates that the chain has not been added to MetaMask
+            if (switchError.code === 4902) {
+                try {
+                    // Attempt to add the new network
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [networkConfig[network]], // Use the full networkConfig here
+                    });
+                } catch (addError) {
+                    // Handle errors like user rejection
+                    console.error(addError);
+                }
+            } else {
+                console.error(switchError);
+            }
+        }
+    };
 
     useEffect(() => {
-        console.log(network)
+        switchNetwork()
     }, [network])
-    
+
     const { connection } = useConnection();
     // const { publicKey, sendTransaction } = useWallet();
     const { setVisible } = useWalletModal();
@@ -108,71 +138,71 @@ const OtherHeader = ({comingSoon = false}) => {
                             {
                                 !comingSoon &&
                                 <>
-                                <Link href="/">
-                                    <Image src={logo} alt="logo" />
-                                </Link>
-                                <div className='config'>
-                                    {
-                                        network == "Ethereum" &&
-                                        <div className='token-config'>
-                                            <a href="#" className={"btn-lg " + (activeToken == "erc20" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc20")}>
-                                                <span>ERC-20</span>
-                                            </a>
-                                            <a href="#" className={"btn-lg erc404 " + (activeToken == "erc404" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc404")}>
-                                                <span>ERC-404</span>
-                                            </a>
-                                        </div>
-                                    }
-                                    <div className='network-config'>
-
-                                        <div ref={networkDropdownRef} className='select-network'>
-                                            <div className='selected-network' onClick={networkToggleDropdown}>
-                                                <div className='logo'>
-                                                    {networkSvgs[network]}
-                                                </div>
-                                                <span>{network}</span>
+                                    <Link href="/">
+                                        <Image src={logo} alt="logo" />
+                                    </Link>
+                                    <div className='config'>
+                                        {
+                                            network == "Ethereum" &&
+                                            <div className='token-config'>
+                                                <a href="#" className={"btn-lg " + (activeToken == "erc20" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc20")}>
+                                                    <span>ERC-20</span>
+                                                </a>
+                                                <a href="#" className={"btn-lg erc404 " + (activeToken == "erc404" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc404")}>
+                                                    <span>ERC-404</span>
+                                                </a>
                                             </div>
-                                            {isNetworkOpen && (
-                                                <ul>
-                                                    {networks.map(network => (
-                                                        <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); }}>
-                                                            <div className='logo'>
-                                                                {networkSvgs[network]}
-                                                            </div>
-                                                            <span>{network}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
+                                        }
+                                        <div className='network-config'>
+
+                                            <div ref={networkDropdownRef} className='select-network'>
+                                                <div className='selected-network' onClick={networkToggleDropdown}>
+                                                    <div className='logo'>
+                                                        {networkSvgs[network]}
+                                                    </div>
+                                                    <span>{network}</span>
+                                                </div>
+                                                {isNetworkOpen && (
+                                                    <ul>
+                                                        {networks.map(network => (
+                                                            <li key={network} onClick={() => { setIsNetworkOpen(false); setNetwork(network); }}>
+                                                                <div className='logo'>
+                                                                    {networkSvgs[network]}
+                                                                </div>
+                                                                <span>{network}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
                                         </div>
+                                        {
+                                            network == "Solana" ?
+                                                // <WalletMultiButton /> 
+                                                <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
+                                                    {isConnected ?
+                                                        <span>Connected</span> :
+                                                        <span>Connect Wallet</span>
+                                                    }
+                                                </a>
+                                                : (
+                                                    network == "Sei" ?
+                                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
+                                                            {seiConnectedWallet ?
+                                                                <span>Connected</span> :
+                                                                <span style={{ fontSize: "18px", fontWeight: "bolder" }}><WalletConnectButton /></span>
+                                                            }
+                                                        </a>
+                                                        :
+                                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
+                                                            {isConnected ?
+                                                                <span>{`${accounts.toString().substr(0, 3)}...${accounts.toString().substr(-5)}`}</span> :
+                                                                <span>Connect Wallet</span>
+                                                            }
+                                                        </a>
+                                                )
+                                        }
                                     </div>
-                                    {
-                                        network == "Solana" ?
-                                        // <WalletMultiButton /> 
-                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
-                                            {isConnected ?
-                                                <span>Connected</span> :
-                                                <span>Connect Wallet</span>
-                                            }
-                                        </a>
-                                        : (
-                                        network == "Sei" ?
-                                            <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
-                                                {seiConnectedWallet ?
-                                                    <span>Connected</span> :
-                                                    <span style={{fontSize: "18px", fontWeight: "bolder"}}><WalletConnectButton /></span>
-                                                }
-                                            </a>
-                                            :
-                                            <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
-                                                {isConnected ?
-                                                    <span>{`${accounts.toString().substr(0,3)}...${accounts.toString().substr(-5)}`}</span> :
-                                                    <span>Connect Wallet</span>
-                                                }
-                                            </a>
-                                        )
-                                    }
-                                </div>
                                 </>
                             }
                         </div>

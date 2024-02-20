@@ -7,11 +7,13 @@ import { tokenInfos } from '@/utils/tokenList';
 import Web3 from 'web3';
 import { book, fetchBookList } from '@/utils/web3helper';
 import ClipLoader from "react-spinners/ClipLoader";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CreateOffer() {
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (window.ethereum) {
@@ -71,7 +73,9 @@ export default function CreateOffer() {
     const networks = [...new Set(tokenInfos.map(token => token.network))];
 
     const [tabStatus, setTabStatus] = useState('network');
-    const [network, setNetwork] = useState(networks[0]);
+    // const [network, setNetwork] = useState(networks[0]);
+    const network = useSelector((state) => state.app.network);
+    const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
 
     const tokens = tokenInfos.filter((token) => token.network == network)
 
@@ -249,7 +253,7 @@ export default function CreateOffer() {
                                         <div className='label'>Selling</div>
                                         <div className='input-area'>
                                             <input placeholder='Enter amount' onChange={(e) => setSellTokenAmount(e.target.value)} type='number' value={sellTokenAmount} />
-                                            <div className='selling-dropdown' ref={sellingTokenDropdownRef}>
+                                            <div className='selling-dropdown'>
                                                 <div className='token-dropdown' onClick={sellingTokenToggleDropdown}>
                                                     <span>
                                                         {sellingToken}
@@ -258,24 +262,7 @@ export default function CreateOffer() {
                                                         <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
                                                     </svg>
                                                 </div>
-                                                {isSellingTokenOpen && (
-                                                    <ul>
-                                                        {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                            <li key={tokenInfo.symbol} onClick={() => {
-                                                                setIsSellingTokenOpen(false);
-                                                                setSellingToken(tokenInfo.symbol);
-                                                                if (forToken == tokenInfo.symbol) {
-                                                                    setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
-                                                                }
-                                                            }}>
-                                                                {/* <div className='logo'>
-                                                                    {networkSvgs[network]}
-                                                                </div> */}
-                                                                <span>{tokenInfo.symbol}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                )}
+
                                             </div>
                                         </div>
                                     </div>
@@ -284,7 +271,7 @@ export default function CreateOffer() {
                                         <div className='input-area'>
                                             <input placeholder='Enter amount' onChange={(e) => setForTokenAmount(e.target.value)} type='number' value={forTokenAmount} />
                                             <div className='for-dropdown'>
-                                                <div className='for-dropdown' ref={forTokenDropdownRef}>
+                                                <div className='for-dropdown'>
                                                     <div className='token-dropdown' onClick={forTokenToggleDropdown}>
                                                         <span>
                                                             {forToken}
@@ -293,24 +280,7 @@ export default function CreateOffer() {
                                                             <path d="M1 1L5.5 6L10 1" stroke="#FEFEFE" stroke-opacity="0.1" stroke-linecap="round" />
                                                         </svg>
                                                     </div>
-                                                    {isForTokenOpen && (
-                                                        <ul>
-                                                            {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                                <li key={tokenInfo.symbol} onClick={() => {
-                                                                    setIsForTokenOpen(false);
-                                                                    setForToken(tokenInfo.symbol);
-                                                                    if (sellingToken == tokenInfo.symbol) {
-                                                                        setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
-                                                                    }
-                                                                }}>
-                                                                    {/* <div className='logo'>
-                                                                        {networkSvgs[network]}
-                                                                    </div> */}
-                                                                    <span>{tokenInfo.symbol}</span>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    )}
+
                                                 </div>
                                             </div>
                                         </div>
@@ -336,17 +306,69 @@ export default function CreateOffer() {
                                                     Sell
                                                 </button>
                                             </div>
-                                        :<div className='navigate-button'>
-                                            <button className='back' onClick={() => setTabStatus('network')}>
-                                                Back
-                                            </button>
-                                            <button className='next' onClick={sellToken}>
-                                                Sell
-                                            </button>
-                                        </div>
+                                            : <div className='navigate-button'>
+                                                <button className='back' onClick={() => setTabStatus('network')}>
+                                                    Back
+                                                </button>
+                                                <button className='next' onClick={sellToken}>
+                                                    Sell
+                                                </button>
+                                            </div>
                                     }
                                 </div>
                         }
+                        {isSellingTokenOpen &&
+                            (
+                                <div className='select-token'>
+                                    <div className='select-token-modal' ref={sellingTokenDropdownRef}>
+                                        <h5 className="select-token-title">Select Token</h5>
+                                        <div className='custom-token'>
+                                            <input placeholder='Custom token' />
+                                        </div>
+                                        <ul className="select-token-list">
+                                            {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
+                                                <li key={tokenInfo.symbol} onClick={() => {
+                                                    setIsSellingTokenOpen(false);
+                                                    setSellingToken(tokenInfo.symbol);
+                                                    if (forToken == tokenInfo.symbol) {
+                                                        setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                    }
+                                                }}>
+                                                    <span>{tokenInfo.symbol}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            )}
+                        {isForTokenOpen &&
+                            (
+                                <div className='select-token'>
+                                    <div className='select-token-modal' ref={forTokenDropdownRef}>
+                                        <h5 className="select-token-title">Select Token</h5>
+                                        <div className='custom-token'>
+                                            <input placeholder='Custom token' />
+                                        </div>
+                                        <ul className="select-token-list">
+                                            {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
+                                                <li key={tokenInfo.symbol} onClick={() => {
+                                                    setIsForTokenOpen(false);
+                                                    setForToken(tokenInfo.symbol);
+                                                    if (sellingToken == tokenInfo.symbol) {
+                                                        setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                    }
+                                                }}>
+                                                    {/* <div className='logo'>
+                                                                        {networkSvgs[network]}
+                                                                    </div> */}
+                                                    <span>{tokenInfo.symbol}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                     </div>
                 </div>
             </main>
