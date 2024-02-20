@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { ERC20, PierMarketplace } from './abi';
-import { tokenInfos } from './tokenList';
+import { defaultTokenInfos } from './tokenList';
 import axios from 'axios';
 import {useSelector} from "react-redux";
 
@@ -61,14 +61,18 @@ const getMarketplaceAddress = (network) => {
 
 
 async function getTokenDetails(tokenAddress) {
-    const web3 = new Web3(window.ethereum);
-    const accounts = await web3.eth.getAccounts();
-    const tokenContract = new web3.eth.Contract(ERC20, tokenAddress);
-    const name = await tokenContract.methods.name().call();
-    const symbol = await tokenContract.methods.symbol().call();
-    const decimals = Number(await tokenContract.methods.decimals().call());
-    const balance = Number(BigInt(await tokenContract.methods.balanceOf(accounts[0]).call()) / BigInt(`1${"0".repeat(decimals)}`));
-    return [name, symbol, balance]
+    try {
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        const tokenContract = new web3.eth.Contract(ERC20, tokenAddress);
+        const name = await tokenContract.methods.name().call();
+        const symbol = await tokenContract.methods.symbol().call();
+        const decimals = Number(await tokenContract.methods.decimals().call());
+        const balance = Number(BigInt(await tokenContract.methods.balanceOf(accounts[0]).call()) / BigInt(`1${"0".repeat(decimals)}`));
+        return [name, symbol, balance, decimals]
+    } catch (error) {
+        return [null, null, null, null]
+    }
 }
 
 async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei, network) {
@@ -100,14 +104,14 @@ async function fetchSellTokenList(network) {
     const waiterList = []
     for (let i = waiter; i > 0; i--) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
-        const decimals = tokenInfos[wts[0]]["decimals"]
+        const decimals = defaultTokenInfos[wts[0]]["decimals"]
         const seller = `${wts[1]}`
         waiterList.push({
             id: i,
             token: {
-                logo: tokenInfos[wts[0]]["logo"],
-                title: tokenInfos[wts[0]]["name"],
-                subtitle: tokenInfos[wts[0]]["symbol"]
+                logo: defaultTokenInfos[wts[0]]["logo"],
+                title: defaultTokenInfos[wts[0]]["name"],
+                subtitle: defaultTokenInfos[wts[0]]["symbol"]
             },
             tokenPrice: parseFloat(((Number(wts[3]) / (10 ** 18)) / (Number(wts[2]) / (10 ** decimals))).toFixed(8)),
             tokenAmount: Number(wts[2]) / (10 ** decimals),
@@ -138,8 +142,8 @@ async function* fetchBookList(network) {
 
     for (let i = 1; i <= bookCount; i++) {
         const book = await pierMarketplaceContract.methods.bookList(i).call();
-        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
-        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
+        const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+        const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
         // Use `yield` to return each book's data immediately
         yield {
@@ -161,8 +165,8 @@ async function fetchBook(id, network) {
     const bookCount = Number(await pierMarketplaceContract.methods.bookCount().call());
 
     const book = await pierMarketplaceContract.methods.bookList(id).call();
-    const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
-    const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
+    const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+    const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
     // Use `yield` to return each book's data immediately
     return {
@@ -237,8 +241,8 @@ async function fetchBookListBatch(ids, network) {
     // Create a promise for each book fetch operation
     const bookPromises = ids.map(async (id) => {
         const book = await pierMarketplaceContract.methods.bookList(id).call();
-        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
-        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
+        const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[1].toLowerCase());
+        const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() === book[3].toLowerCase());
 
         // Calculate token amounts considering their decimals
         const sellTokenAmount = Number(book[2]) / (10 ** sellTokenInfo.decimals);
@@ -284,8 +288,8 @@ async function fetchActivity(network) {
             if(data.length < 5) {
                 continue;
             }
-            const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
-            const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
+            const sellTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
+            const forTokenInfo = defaultTokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
             const bookActivity = {
                 category: 'book',
                 bookId: hexToDecimal(data[1]),

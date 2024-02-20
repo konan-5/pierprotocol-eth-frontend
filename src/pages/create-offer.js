@@ -3,17 +3,53 @@ import Head from 'next/head'
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react'
 import { networkSvgs } from '@/utils/svg';
-import { tokenInfos } from '@/utils/tokenList';
+import { defaultTokenInfos } from '@/utils/tokenList';
 import Web3 from 'web3';
-import { book, fetchBookList } from '@/utils/web3helper';
+import { book, fetchBookList, getTokenDetails } from '@/utils/web3helper';
 import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch, useSelector } from 'react-redux';
+import { networks } from '@/utils/constants';
 
 export default function CreateOffer() {
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
     const dispatch = useDispatch();
+
+    const [customSellTokenAddress, setCustomSellTokenAddress] = useState("")
+    const [customForTokenAddress, setCustomForTokenAddress] = useState("")
+    const [customSellToken, setCustomSellToken] = useState("")
+    const [customForToken, setCustomForToken] = useState("")
+
+    const router = useRouter();
+
+    const [tabStatus, setTabStatus] = useState('network');
+    // const [network, setNetwork] = useState(networks[0]);
+    const network = useSelector((state) => state.app.network);
+    const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
+
+    const defaultTokens = defaultTokenInfos.filter((token) => token.network == network)
+
+    const [sellingToken, setSellingToken] = useState(defaultTokens[0].symbol);
+    const [forToken, setForToken] = useState(defaultTokens[1].symbol);
+
+    const [isNetworkOpen, setIsNetworkOpen] = useState(false);
+    const networkDropdownRef = useRef(null);
+
+    const [isSellingTokenOpen, setIsSellingTokenOpen] = useState(false);
+    const sellingTokenDropdownRef = useRef(null);
+
+    const [isForTokenOpen, setIsForTokenOpen] = useState(false);
+    const forTokenDropdownRef = useRef(null);
+
+    const [sellTokenAmount, setSellTokenAmount] = useState(null);
+    const [forTokenAmount, setForTokenAmount] = useState(null);
+
+    const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
+    const sellingTokenToggleDropdown = () => setIsSellingTokenOpen(!isSellingTokenOpen);
+    const forTokenToggleDropdown = () => setIsForTokenOpen(!isForTokenOpen);
+
+    const [booking, setBooking] = useState(false);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -32,6 +68,59 @@ export default function CreateOffer() {
             }
         };
     }, []);
+
+    const saveUpdateToken = (tokenInfo, tokenAddress) => {
+        let localTokenInfos = JSON.parse(localStorage.getItem["tokenInfo"])
+        if (localTokenInfos) {
+            if (!localTokenInfos.findIndex((a) => a.address == tokenAddress))
+                localStorage.setItem("tokenInfo", JSON.stringify([{
+                    network,
+                    address: tokenAddress,
+                    name: tokenInfo[0],
+                    symbol: tokenInfo[1],
+                    decimals: tokenInfo[3],
+                }, ...localTokenInfos]))
+        } else {
+            localStorage.setItem("tokenInfo", JSON.stringify([{
+                network,
+                address: tokenAddress,
+                name: tokenInfo[0],
+                symbol: tokenInfo[1],
+                decimals: tokenInfo[3],
+            }]))
+        }
+    }
+
+    useEffect(() => {
+        async function getToken() {
+            const tokenInfo = await getTokenDetails(customForTokenAddress)
+            if (tokenInfo[1]) {
+                setCustomForToken(tokenInfo[1])
+                saveUpdateToken(tokenInfo, customForTokenAddress)
+            }
+        }
+        if (customForTokenAddress.length == 42) {
+            getToken()
+        } else {
+            setCustomForToken("")
+        }
+    }, [customForTokenAddress])
+
+    useEffect(() => {
+        console.log(customSellTokenAddress)
+        async function getToken() {
+            const tokenInfo = await getTokenDetails(customSellTokenAddress)
+            if (tokenInfo[1]) {
+                setCustomSellToken(tokenInfo[1])
+            }
+            saveUpdateToken(tokenInfo, customSellTokenAddress)
+        }
+        if (customSellTokenAddress.length == 42) {
+            getToken()
+        } else {
+            setCustomSellToken("")
+        }
+    }, [customSellTokenAddress])
 
     const handleAccountsChanged = (accounts) => {
         if (accounts.length === 0) {
@@ -68,38 +157,6 @@ export default function CreateOffer() {
         }
     };
 
-    const router = useRouter();
-
-    const networks = [...new Set(tokenInfos.map(token => token.network))];
-
-    const [tabStatus, setTabStatus] = useState('network');
-    // const [network, setNetwork] = useState(networks[0]);
-    const network = useSelector((state) => state.app.network);
-    const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
-
-    const tokens = tokenInfos.filter((token) => token.network == network)
-
-    const [sellingToken, setSellingToken] = useState(tokens[0].symbol);
-    const [forToken, setForToken] = useState(tokens[1].symbol);
-
-    const [isNetworkOpen, setIsNetworkOpen] = useState(false);
-    const networkDropdownRef = useRef(null);
-
-    const [isSellingTokenOpen, setIsSellingTokenOpen] = useState(false);
-    const sellingTokenDropdownRef = useRef(null);
-
-    const [isForTokenOpen, setIsForTokenOpen] = useState(false);
-    const forTokenDropdownRef = useRef(null);
-
-    const [sellTokenAmount, setSellTokenAmount] = useState(null);
-    const [forTokenAmount, setForTokenAmount] = useState(null);
-
-    const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
-    const sellingTokenToggleDropdown = () => setIsSellingTokenOpen(!isSellingTokenOpen);
-    const forTokenToggleDropdown = () => setIsForTokenOpen(!isForTokenOpen);
-
-    const [booking, setBooking] = useState(false);
-
     const handleClickOutside = (event) => {
         if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target)) {
             setIsNetworkOpen(false);
@@ -118,8 +175,8 @@ export default function CreateOffer() {
             if (!isConnected) {
                 await connectWallet()
             }
-            const sellTokenInfo = tokens.find(item => item.symbol == sellingToken)
-            const forTokenInfo = tokens.find(item => item.symbol == forToken)
+            const sellTokenInfo = defaultTokens.find(item => item.symbol == sellingToken)
+            const forTokenInfo = defaultTokens.find(item => item.symbol == forToken)
             console.log(network, sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount)
             await book(sellTokenInfo, forTokenInfo, sellTokenAmount, forTokenAmount, network)
             router.push("/dashboard")
@@ -133,8 +190,8 @@ export default function CreateOffer() {
     useEffect(() => {
         setSellTokenAmount(null)
         setForTokenAmount(null)
-        setSellingToken(tokens[0].symbol)
-        setForToken(tokens[1].symbol)
+        setSellingToken(defaultTokens[0].symbol)
+        setForToken(defaultTokens[1].symbol)
     }, [network])
 
     useEffect(() => {
@@ -323,20 +380,35 @@ export default function CreateOffer() {
                                     <div className='select-token-modal' ref={sellingTokenDropdownRef}>
                                         <h5 className="select-token-title">Select Token</h5>
                                         <div className='custom-token'>
-                                            <input placeholder='Custom token' />
+                                            <input placeholder='Custom token address' onChange={(e) => { setCustomSellTokenAddress(e.target.value) }} />
                                         </div>
                                         <ul className="select-token-list">
-                                            {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                <li key={tokenInfo.symbol} onClick={() => {
-                                                    setIsSellingTokenOpen(false);
-                                                    setSellingToken(tokenInfo.symbol);
-                                                    if (forToken == tokenInfo.symbol) {
-                                                        setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
-                                                    }
-                                                }}>
-                                                    <span>{tokenInfo.symbol}</span>
-                                                </li>
-                                            ))}
+                                            {
+                                                customSellToken ?
+                                                    <li onClick={() => {
+                                                        setIsSellingTokenOpen(false);
+                                                        setSellingToken(customSellToken);
+                                                        // if (forToken == tokenInfo.symbol) {
+                                                        //     setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                        // }
+                                                    }}>
+                                                        <span>{customSellToken}</span>
+                                                    </li>
+                                                    :
+                                                    <>
+                                                        {defaultTokenInfos.filter((item) => item.network == network).map(tokenInfo => (
+                                                            <li key={tokenInfo.symbol} onClick={() => {
+                                                                setIsSellingTokenOpen(false);
+                                                                setSellingToken(tokenInfo.symbol);
+                                                                if (forToken == tokenInfo.symbol) {
+                                                                    setForToken(defaultTokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                                }
+                                                            }}>
+                                                                <span>{tokenInfo.symbol}</span>
+                                                            </li>
+                                                        ))}
+                                                    </>
+                                            }
                                         </ul>
 
                                     </div>
@@ -348,23 +420,35 @@ export default function CreateOffer() {
                                     <div className='select-token-modal' ref={forTokenDropdownRef}>
                                         <h5 className="select-token-title">Select Token</h5>
                                         <div className='custom-token'>
-                                            <input placeholder='Custom token' />
+                                            <input placeholder='Custom token address' onChange={(e) => { setCustomForTokenAddress(e.target.value) }} />
                                         </div>
                                         <ul className="select-token-list">
-                                            {tokenInfos.filter((item) => item.network == network).map(tokenInfo => (
-                                                <li key={tokenInfo.symbol} onClick={() => {
-                                                    setIsForTokenOpen(false);
-                                                    setForToken(tokenInfo.symbol);
-                                                    if (sellingToken == tokenInfo.symbol) {
-                                                        setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
-                                                    }
-                                                }}>
-                                                    {/* <div className='logo'>
-                                                                        {networkSvgs[network]}
-                                                                    </div> */}
-                                                    <span>{tokenInfo.symbol}</span>
-                                                </li>
-                                            ))}
+                                            {
+                                                customForToken ?
+                                                    <li onClick={() => {
+                                                        setIsForTokenOpen(false);
+                                                        setForToken(customForToken);
+                                                        // if (sellingToken == tokenInfo.symbol) {
+                                                        //     setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                        // }
+                                                    }}>
+                                                        <span>{customForToken}</span>
+                                                    </li>
+                                                    :
+                                                    <>
+                                                        {defaultTokenInfos.filter((item) => item.network == network).map(tokenInfo => (
+                                                            <li key={tokenInfo.symbol} onClick={() => {
+                                                                setIsForTokenOpen(false);
+                                                                setForToken(tokenInfo.symbol);
+                                                                if (sellingToken == tokenInfo.symbol) {
+                                                                    setSellingToken(defaultTokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
+                                                                }
+                                                            }}>
+                                                                <span>{tokenInfo.symbol}</span>
+                                                            </li>
+                                                        ))}
+                                                    </>
+                                            }
                                         </ul>
                                     </div>
                                 </div>

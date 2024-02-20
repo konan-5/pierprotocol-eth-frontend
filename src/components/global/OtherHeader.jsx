@@ -3,7 +3,6 @@ import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import logo from "../../assets/images/logo.png";
 import Image from "next/image";
-import { tokenInfos } from '@/utils/tokenList';
 import { networkSvgs } from '@/utils/svg';
 
 import { WalletMultiButton, setVisible, useWalletModal } from '@solana/wallet-adapter-react-ui';
@@ -12,6 +11,7 @@ import { networkConfig } from '@/utils/networkConfig';
 
 import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { networks } from '@/utils/constants';
 
 const OtherHeader = ({ comingSoon = false }) => {
     const dispatch = useDispatch();
@@ -23,7 +23,6 @@ const OtherHeader = ({ comingSoon = false }) => {
     const networkToggleDropdown = () => setIsNetworkOpen(!isNetworkOpen);
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
 
-    const networks = [...new Set(tokenInfos.map(token => token.network))];
     // const [network, setNetwork] = useState(networks[0]);
     const network = useSelector((state) => state.app.network);
 
