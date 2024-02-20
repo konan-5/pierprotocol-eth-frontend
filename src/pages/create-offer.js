@@ -7,11 +7,13 @@ import { tokenInfos } from '@/utils/tokenList';
 import Web3 from 'web3';
 import { book, fetchBookList } from '@/utils/web3helper';
 import ClipLoader from "react-spinners/ClipLoader";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CreateOffer() {
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (window.ethereum) {
@@ -71,7 +73,9 @@ export default function CreateOffer() {
     const networks = [...new Set(tokenInfos.map(token => token.network))];
 
     const [tabStatus, setTabStatus] = useState('network');
-    const [network, setNetwork] = useState(networks[0]);
+    // const [network, setNetwork] = useState(networks[0]);
+    const network = useSelector((state) => state.app.network);
+    const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
 
     const tokens = tokenInfos.filter((token) => token.network == network)
 

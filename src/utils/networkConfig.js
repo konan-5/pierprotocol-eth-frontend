@@ -13,26 +13,26 @@ const networkConfig = {
     },
 
     Base: {
-        "chainId": "0xA",
+        "chainId": "0x2105",
         "chainName": "Base",
         "nativeCurrency": {
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18
         },
-        "rpcUrls": ["https://rpc.base.org"],
+        "rpcUrls": ["https://mainnet.base.org"],
         "blockExplorerUrls": ["https://explorer.base.org"]
     },
 
-    zkSync: {
-        "chainId": "0x1D",
+    ZkSync: {
+        "chainId": "0x144",
         "chainName": "zkSync",
         "nativeCurrency": {
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18
         },
-        "rpcUrls": ["https://rpc.zksync.io"],
+        "rpcUrls": ["https://zksync-era.blockpi.network/v1/rpc/public"],
         "blockExplorerUrls": ["https://zkscan.io"]
     },
 
@@ -73,7 +73,7 @@ const networkConfig = {
     },
 
     Scroll: {
-        "chainId": "0x1C",
+        "chainId": "0x82750",
         "chainName": "Scroll",
         "nativeCurrency": {
             "name": "Ether",
