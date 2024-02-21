@@ -70,10 +70,16 @@ const OtherHeader = ({ comingSoon = false }) => {
 
     useEffect(() => {
         if (window.ethereum) {
+            const _checkAccount = async () => {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                setAccounts(accounts);
+                setIsConnected(true);
+            }
+            _checkAccount()
             // const web3Instance = new Web3(window.ethereum);
             // setWeb3(web3Instance);
             // checkIfWalletIsConnected();
-            // window.ethereum.on('accountsChanged', handleAccountsChanged);
+            window.ethereum.on('accountsChanged', handleAccountsChanged);
         } else {
             console.log("Please install MetaMask!");
         }
@@ -93,6 +99,7 @@ const OtherHeader = ({ comingSoon = false }) => {
             setAccounts([]);
         } else {
             setAccounts(accounts);
+            console.log(accounts)
             setIsConnected(true);
         }
     };
@@ -195,7 +202,7 @@ const OtherHeader = ({ comingSoon = false }) => {
                                                         :
                                                         <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
                                                             {isConnected ?
-                                                                <span>{`${accounts.toString().substr(0, 3)}...${accounts.toString().substr(-5)}`}</span> :
+                                                                <span>{`${accounts[0].toString().substr(0, 3)}...${accounts[0].toString().substr(-5)}`}</span> :
                                                                 <span>Connect Wallet</span>
                                                             }
                                                         </a>
