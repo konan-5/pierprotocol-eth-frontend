@@ -9,6 +9,7 @@ import { book, fetchBookList, getTokenDetails } from '@/utils/web3helper';
 import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch, useSelector } from 'react-redux';
 import { networks } from '@/utils/constants';
+import { createOrUpdateSafely } from '@/utils/firebase';
 
 export default function CreateOffer() {
     const [web3, setWeb3] = useState(null);
@@ -69,26 +70,17 @@ export default function CreateOffer() {
         };
     }, []);
 
-    const saveUpdateToken = (tokenInfo, tokenAddress) => {
-        if (localStorage.getItem["tokenInfo"]) {
-            let localTokenInfos = JSON.parse(localStorage.getItem["tokenInfo"])
-            if (!localTokenInfos.findIndex((a) => a.address == tokenAddress))
-                localStorage.setItem("tokenInfo", JSON.stringify([{
-                    network,
-                    address: tokenAddress,
-                    name: tokenInfo[0],
-                    symbol: tokenInfo[1],
-                    decimals: tokenInfo[3],
-                }, ...localTokenInfos]))
-        } else {
-            localStorage.setItem("tokenInfo", JSON.stringify([{
-                network,
-                address: tokenAddress,
+    const saveUpdateToken = async (tokenInfo, tokenAddress) => {
+        await createOrUpdateSafely(
+            network,
+            {
                 name: tokenInfo[0],
                 symbol: tokenInfo[1],
                 decimals: tokenInfo[3],
-            }]))
-        }
+                // logo: "",
+            },
+            tokenAddress
+        )
     }
 
     useEffect(() => {
