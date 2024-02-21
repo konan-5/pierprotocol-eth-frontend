@@ -1,4 +1,4 @@
-const tokenInfos = [
+const defaultTokenInfos = [
     {
         network: "Ethereum",
         address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
@@ -211,4 +211,4 @@ const tokenInfos = [
     // },
 ]
 
-export { tokenInfos }
+export { defaultTokenInfos }

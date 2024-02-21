@@ -1,8 +1,9 @@
 import Web3 from 'web3';
 import { ERC20, PierMarketplace } from './abi';
-import { tokenInfos } from './tokenList';
+import { defaultTokenInfos } from './tokenList';
 import axios from 'axios';
 import {useSelector} from "react-redux";
+import { getAllFire } from './firebase';
 
 // const provider = "https://ethereum-sepolia.publicnode.com"
 const providerInfo = {
@@ -61,14 +62,18 @@ const getMarketplaceAddress = (network) => {
 
 
 async function getTokenDetails(tokenAddress) {
-    const web3 = new Web3(window.ethereum);
-    const accounts = await web3.eth.getAccounts();
-    const tokenContract = new web3.eth.Contract(ERC20, tokenAddress);
-    const name = await tokenContract.methods.name().call();
-    const symbol = await tokenContract.methods.symbol().call();
-    const decimals = Number(await tokenContract.methods.decimals().call());
-    const balance = Number(BigInt(await tokenContract.methods.balanceOf(accounts[0]).call()) / BigInt(`1${"0".repeat(decimals)}`));
-    return [name, symbol, balance]
+    try {
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        const tokenContract = new web3.eth.Contract(ERC20, tokenAddress);
+        const name = await tokenContract.methods.name().call();
+        const symbol = await tokenContract.methods.symbol().call();
+        const decimals = Number(await tokenContract.methods.decimals().call());
+        const balance = Number(BigInt(await tokenContract.methods.balanceOf(accounts[0]).call()) / BigInt(`1${"0".repeat(decimals)}`));
+        return [name, symbol, balance, decimals]
+    } catch (error) {
+        return [null, null, null, null]
+    }
 }
 
 async function orderTokenForSell(tokenAddress, tokenAmountToSell, sellPriceInWei, network) {
@@ -100,14 +105,14 @@ async function fetchSellTokenList(network) {
     const waiterList = []
     for (let i = waiter; i > 0; i--) {
         const wts = await pierMarketplaceContract.methods.wtsListings(i).call();
-        const decimals = tokenInfos[wts[0]]["decimals"]
+        const decimals = defaultTokenInfos[wts[0]]["decimals"]
         const seller = `${wts[1]}`
         waiterList.push({
             id: i,
             token: {
-                logo: tokenInfos[wts[0]]["logo"],
-                title: tokenInfos[wts[0]]["name"],
-                subtitle: tokenInfos[wts[0]]["symbol"]
+                logo: defaultTokenInfos[wts[0]]["logo"],
+                title: defaultTokenInfos[wts[0]]["name"],
+                subtitle: defaultTokenInfos[wts[0]]["symbol"]
             },
             tokenPrice: parseFloat(((Number(wts[3]) / (10 ** 18)) / (Number(wts[2]) / (10 ** decimals))).toFixed(8)),
             tokenAmount: Number(wts[2]) / (10 ** decimals),
@@ -131,6 +136,7 @@ async function fetchSellTokenList(network) {
 
 async function* fetchBookList(network) {
     console.log("network: ", getMarketplaceAddress(network));
+    const tokenInfos = await getAllFire()
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -155,6 +161,7 @@ async function* fetchBookList(network) {
 }
 
 async function fetchBook(id, network) {
+    const tokenInfos = await getAllFire()
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -230,6 +237,7 @@ function hexToDateTime(hexString) {
 }
 
 async function fetchBookListBatch(ids, network) {
+    const tokenInfos = await getAllFire()
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -260,6 +268,7 @@ async function fetchBookListBatch(ids, network) {
 }
 
 async function fetchActivity(network) {
+    const tokenInfos = await getAllFire()
     // try {
     console.log("network: ", getMarketplaceAddress(network));
         const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"

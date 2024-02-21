@@ -14,6 +14,12 @@ const Header = () => {
 
   useEffect(() => {
     if (window.ethereum) {
+      const _checkAccount = async () => {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setAccounts(accounts);
+        setIsConnected(true);
+      }
+      _checkAccount()
       const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
       checkIfWalletIsConnected();
