@@ -163,9 +163,11 @@ export default function CreateOffer() {
         }
         if (sellingTokenDropdownRef.current && !sellingTokenDropdownRef.current.contains(event.target)) {
             setIsSellingTokenOpen(false);
+            setCustomSellTokenAddress("");
         }
         if (forTokenDropdownRef.current && !forTokenDropdownRef.current.contains(event.target)) {
             setIsForTokenOpen(false);
+            setCustomForTokenAddress("");
         }
     };
 
@@ -388,6 +390,7 @@ export default function CreateOffer() {
                                                     <li onClick={() => {
                                                         setIsSellingTokenOpen(false);
                                                         setSellingToken(customSellToken);
+                                                        setCustomSellTokenAddress("");
                                                         // if (forToken == tokenInfo.symbol) {
                                                         //     setForToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                         // }
@@ -428,6 +431,7 @@ export default function CreateOffer() {
                                                     <li onClick={() => {
                                                         setIsForTokenOpen(false);
                                                         setForToken(customForToken);
+                                                        setCustomForTokenAddress("");
                                                         // if (sellingToken == tokenInfo.symbol) {
                                                         //     setSellingToken(tokens.find((ktem) => ktem.symbol != tokenInfo.symbol).symbol)
                                                         // }

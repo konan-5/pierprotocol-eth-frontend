@@ -60,6 +60,12 @@ const OtherHeader = ({ comingSoon = false }) => {
         }
     };
 
+    const handleClickOutside = (event) => {
+        if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target)) {
+            setIsNetworkOpen(false);
+        }
+    };
+
     useEffect(() => {
         switchNetwork()
     }, [network])
@@ -89,6 +95,10 @@ const OtherHeader = ({ comingSoon = false }) => {
             if (window.ethereum) {
                 window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
             }
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
         };
     }, []);
 
