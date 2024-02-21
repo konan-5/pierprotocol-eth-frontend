@@ -3,13 +3,13 @@ import Head from 'next/head'
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react'
 import { networkSvgs } from '@/utils/svg';
-import { defaultTokenInfos } from '@/utils/tokenList';
+// import { defaultTokenInfos } from '@/utils/tokenList';
 import Web3 from 'web3';
 import { book, fetchBookList, getTokenDetails } from '@/utils/web3helper';
 import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch, useSelector } from 'react-redux';
 import { networks } from '@/utils/constants';
-import { createOrUpdateSafely } from '@/utils/firebase';
+import { createOrUpdateSafely, getAllFire } from '@/utils/firebase';
 
 export default function CreateOffer() {
     const [web3, setWeb3] = useState(null);
@@ -22,6 +22,8 @@ export default function CreateOffer() {
     const [customSellToken, setCustomSellToken] = useState("")
     const [customForToken, setCustomForToken] = useState("")
 
+    const [defaultTokenInfos, setDefaultTokenInfos] = useState([])
+
     const router = useRouter();
 
     const [tabStatus, setTabStatus] = useState('network');
@@ -31,8 +33,8 @@ export default function CreateOffer() {
 
     const defaultTokens = defaultTokenInfos.filter((token) => token.network == network)
 
-    const [sellingToken, setSellingToken] = useState(defaultTokens[0].symbol);
-    const [forToken, setForToken] = useState(defaultTokens[1].symbol);
+    const [sellingToken, setSellingToken] = useState("Select");
+    const [forToken, setForToken] = useState("Select");
 
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
     const networkDropdownRef = useRef(null);
@@ -184,11 +186,16 @@ export default function CreateOffer() {
     useEffect(() => {
         setSellTokenAmount(null)
         setForTokenAmount(null)
-        setSellingToken(defaultTokens[0].symbol)
-        setForToken(defaultTokens[1].symbol)
+        setSellingToken("Select")
+        setForToken("Select")
     }, [network])
 
     useEffect(() => {
+        const _run = async () => {
+            const _tokenInfos = await getAllFire();
+            setDefaultTokenInfos(_tokenInfos)
+        }
+        _run()
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);

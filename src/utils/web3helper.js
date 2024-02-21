@@ -3,6 +3,7 @@ import { ERC20, PierMarketplace } from './abi';
 import { defaultTokenInfos } from './tokenList';
 import axios from 'axios';
 import {useSelector} from "react-redux";
+import { getAllFire } from './firebase';
 
 // const provider = "https://ethereum-sepolia.publicnode.com"
 const providerInfo = {
@@ -135,7 +136,7 @@ async function fetchSellTokenList(network) {
 
 async function* fetchBookList(network) {
     console.log("network: ", getMarketplaceAddress(network));
-    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
+    const tokenInfos = await getAllFire()
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -160,7 +161,7 @@ async function* fetchBookList(network) {
 }
 
 async function fetchBook(id, network) {
-    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
+    const tokenInfos = await getAllFire()
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -236,7 +237,7 @@ function hexToDateTime(hexString) {
 }
 
 async function fetchBookListBatch(ids, network) {
-    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
+    const tokenInfos = await getAllFire()
     const provider = providerInfo[network]
     const web3 = new Web3(provider);
     const pierMarketplaceContract = new web3.eth.Contract(PierMarketplace, getMarketplaceAddress(network));
@@ -267,7 +268,7 @@ async function fetchBookListBatch(ids, network) {
 }
 
 async function fetchActivity(network) {
-    const tokenInfos = [...defaultTokenInfos, JSON.parse(localStorage.getItem("tokenInfo"))]
+    const tokenInfos = await getAllFire()
     // try {
     console.log("network: ", getMarketplaceAddress(network));
         const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"

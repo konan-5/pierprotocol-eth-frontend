@@ -35,9 +35,28 @@ const getFire = async (network, address) => {
 }
 
 const getAllFire = async () => {
-    await firebaseDB.get(".json")
-        .then(response => console.log(response.data))
-        .catch(error => console.error(error));
+    try {
+        const response = await firebaseDB.get(".json")
+        const tokens = response.data.tokens
+
+        const result = [];
+        Object.entries(tokens).forEach(([network, tokensByNetwork]) => {
+            Object.entries(tokensByNetwork).forEach(([address, { decimals, name, symbol }]) => {
+                result.push({
+                    network,
+                    address,
+                    name,
+                    symbol,
+                    decimals,
+                    logo: `../assets/images/tokens/${symbol.toLowerCase()}.png`
+                });
+            });
+        });
+        console.log(result)
+        return result;
+    } catch (error) {
+        
+    }
 }
 
 const updateFire = async (network, address, updateData) => {
