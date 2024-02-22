@@ -82,6 +82,18 @@ const networkConfig = {
         },
         "rpcUrls": ["https://rpc.scroll.io"],
         "blockExplorerUrls": ["https://explorer.scroll.io"]
+    },
+
+    Linea: {
+        "chainId": "0xE708",
+        "chainName": "Linea",
+        "nativeCurrency": {
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+        },
+        "rpcUrls": ["https://linea.drpc.org"],
+        "blockExplorerUrls": ["https://lineascan.build/"],
     }
 
 }
