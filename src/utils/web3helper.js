@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import { ERC20, PierMarketplace } from './abi';
 import { defaultTokenInfos } from './tokenList';
 import axios from 'axios';
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { getAllFire } from './firebase';
 
 // const provider = "https://ethereum-sepolia.publicnode.com"
@@ -12,7 +12,8 @@ const providerInfo = {
     "Arbitrum": "https://arb-mainnet.g.alchemy.com/v2/EG83x-cSn3_otO7KBnqnG0ws3mt5fnLP",
     "Base": "https://base-mainnet.g.alchemy.com/v2/mWNKTlIEj3AujVAvLytXLenxbEGhlhag",
     "ZkSync": "https://mainnet.era.zksync.io",
-    "Scroll": "",
+    "Scroll": "https://1rpc.io/scroll",
+    "Linea": "https://linea.drpc.org",
 }
 
 const scanApiInfo = {
@@ -39,6 +40,10 @@ const scanApiInfo = {
     "Scroll": {
         "endpoint": "https://api.scrollscan.com/api",
         "key": "MDDVVBGY7QFY6D34EB9P7DSGXAVS5SRDVY"
+    },
+    "Linea": {
+        "endpoint": "https://api.lineascan.build/api",
+        "key": "4EYQVJRXAQPCKKFCZXIQZQ1X6BHBIXM4ZK"
     }
 }
 
@@ -271,91 +276,91 @@ async function fetchActivity(network) {
     const tokenInfos = await getAllFire()
     // try {
     console.log("network: ", getMarketplaceAddress(network));
-        const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
-        const buyTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
-        // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
-        let bookResponse = null;
-        if (network === "ZkSync") {
-            bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&page=1&offset=1000`)
-            //filter only bookResponse.data.result only if topics includes bookTopic
-            bookResponse = {
-                data: {
-                    result: bookResponse.data.result.filter((item) => item.topics.includes(bookTopic))
-                }
-            };
-        } else {
-            bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&topic0=${bookTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
-        }
-
-        let bookActivitys = []
-        for (let item of bookResponse.data.result) {
-            const data = [...item.topics, ...splitInto64LengthArray(item.data)]
-            if(data.length < 5) {
-                continue;
+    const bookTopic = "0x40fa13892a154d5d335b7d020f62557c2b03f175d8c7a397f0578b72646bb24c"
+    const buyTopic = "0x892605e5aa205718bf5422cbe570beb6c419fe374afe9a7f9c8fc114b99020a8"
+    // https://api-sepolia.etherscan.io//api?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${topic0}&page=1&offset=1000&apikey=YourApiKeyToken
+    let bookResponse = null;
+    if (network === "ZkSync") {
+        bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&page=1&offset=1000`)
+        //filter only bookResponse.data.result only if topics includes bookTopic
+        bookResponse = {
+            data: {
+                result: bookResponse.data.result.filter((item) => item.topics.includes(bookTopic))
             }
-            const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
-            const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
-            const bookActivity = {
-                category: 'book',
-                bookId: hexToDecimal(data[1]),
-                seller: formatAddress(data[2]),
-                buyer: "",
-                sellTokenInfo: sellTokenInfo,
-                sellTokenAmount: hexToDecimal(data[4]) / (10 ** sellTokenInfo.decimals),
-                forTokenInfo: forTokenInfo,
-                forTokenAmount: hexToDecimal(data[6]) / (10 ** forTokenInfo.decimals),
-                timeStamp: hexToDateTime(item.timeStamp),
-                unixTime: hexToDecimal(item.timeStamp)
+        };
+    } else {
+        bookResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&topic0=${bookTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+    }
+
+    let bookActivitys = []
+    for (let item of bookResponse.data.result) {
+        const data = [...item.topics, ...splitInto64LengthArray(item.data)]
+        if (data.length < 5) {
+            continue;
+        }
+        const sellTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[3]))
+        const forTokenInfo = tokenInfos.find((item) => item.address.toLowerCase() == formatAddress(data[5]))
+        const bookActivity = {
+            category: 'book',
+            bookId: hexToDecimal(data[1]),
+            seller: formatAddress(data[2]),
+            buyer: "",
+            sellTokenInfo: sellTokenInfo,
+            sellTokenAmount: hexToDecimal(data[4]) / (10 ** sellTokenInfo.decimals),
+            forTokenInfo: forTokenInfo,
+            forTokenAmount: hexToDecimal(data[6]) / (10 ** forTokenInfo.decimals),
+            timeStamp: hexToDateTime(item.timeStamp),
+            unixTime: hexToDecimal(item.timeStamp)
+        }
+        bookActivitys.push(bookActivity)
+    }
+
+    let buyActivitys = []
+    console.log(11111111111)
+    let buyResponse = null;
+    if (network === "ZkSync") {
+        buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&page=1&offset=1000`)
+        buyResponse = {
+            data: {
+                result: bookResponse.data.result.filter((item) => item.topics.includes(buyTopic))
             }
-            bookActivitys.push(bookActivity)
+        };
+    } else {
+        buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+    }
+    //const buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
+    console.log(buyResponse.data.result, 2222222222222)
+    let bookIds = []
+
+    for (let item of buyResponse.data.result) {
+        const data = [...item.topics, ...splitInto64LengthArray(item.data)]
+        const bookId = hexToDecimal(data[1])
+        const buyActivity = {
+            category: 'buy',
+            bookId: bookId,
+            seller: formatAddress(data[2]),
+            buyer: formatAddress(data[3]),
+            sellTokenAmount: hexToDecimal(data[4]),
+            forTokenAmount: hexToDecimal(data[5]),
+            timeStamp: hexToDateTime(item.timeStamp),
+            unixTime: hexToDecimal(item.timeStamp)
         }
+        buyActivitys.push(buyActivity)
+        bookIds.push(bookId)
+    }
 
-        let buyActivitys = []
-        console.log(11111111111)
-        let buyResponse = null;
-        if (network === "ZkSync") {
-            buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&page=1&offset=1000`)
-            buyResponse = {
-                data: {
-                    result: bookResponse.data.result.filter((item) => item.topics.includes(buyTopic))
-                }
-            };
-        } else {
-            buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${getMarketplaceAddress(network)}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
-        }
-        //const buyResponse = await axios.get(`${scanApiInfo[network]['endpoint']}?module=logs&action=getLogs&toBlock=latest&address=${NEXT_PUBLIC_PIER_MARKETPLACE}&topic0=${buyTopic}&page=1&offset=1000&apikey=${scanApiInfo[network]['key']}`)
-        console.log(buyResponse.data.result, 2222222222222)
-        let bookIds = []
+    const bookList = await fetchBookListBatch(bookIds, network)
+    for (let idx in buyActivitys) {
+        buyActivitys[idx].sellTokenInfo = bookList[idx].sellTokenInfo
+        buyActivitys[idx].forTokenInfo = bookList[idx].forTokenInfo
+        buyActivitys[idx].sellTokenAmount = buyActivitys[idx].sellTokenAmount / (10 ** bookList[idx].sellTokenInfo.decimals)
+        buyActivitys[idx].forTokenAmount = buyActivitys[idx].forTokenAmount / (10 ** bookList[idx].forTokenInfo.decimals)
+    }
 
-        for (let item of buyResponse.data.result) {
-            const data = [...item.topics, ...splitInto64LengthArray(item.data)]
-            const bookId = hexToDecimal(data[1])
-            const buyActivity = {
-                category: 'buy',
-                bookId: bookId,
-                seller: formatAddress(data[2]),
-                buyer: formatAddress(data[3]),
-                sellTokenAmount: hexToDecimal(data[4]),
-                forTokenAmount: hexToDecimal(data[5]),
-                timeStamp: hexToDateTime(item.timeStamp),
-                unixTime: hexToDecimal(item.timeStamp)
-            }
-            buyActivitys.push(buyActivity)
-            bookIds.push(bookId)
-        }
+    const activitys = [...bookActivitys, ...buyActivitys]
+    console.log(activitys)
 
-        const bookList = await fetchBookListBatch(bookIds, network)
-        for (let idx in buyActivitys) {
-            buyActivitys[idx].sellTokenInfo = bookList[idx].sellTokenInfo
-            buyActivitys[idx].forTokenInfo = bookList[idx].forTokenInfo
-            buyActivitys[idx].sellTokenAmount = buyActivitys[idx].sellTokenAmount / (10 ** bookList[idx].sellTokenInfo.decimals)
-            buyActivitys[idx].forTokenAmount = buyActivitys[idx].forTokenAmount / (10 ** bookList[idx].forTokenInfo.decimals)
-        }
-
-        const activitys = [...bookActivitys, ...buyActivitys]
-        console.log(activitys)
-
-        return activitys.sort((a, b) => b.unixTime - a.unixTime)
+    return activitys.sort((a, b) => b.unixTime - a.unixTime)
     // } catch (error) {
     //     console.log(error)
     //     return []

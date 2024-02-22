@@ -5,4 +5,5 @@ export const networks = [
     'ZkSync',
     'Base',
     'Scroll',
+    "Linea"
 ]
