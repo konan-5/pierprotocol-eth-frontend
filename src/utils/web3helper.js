@@ -14,6 +14,7 @@ const providerInfo = {
     "ZkSync": "https://mainnet.era.zksync.io",
     "Scroll": "https://1rpc.io/scroll",
     "Linea": "https://linea.drpc.org",
+    "Avalanche": "https://avalanche.drpc.org",
 }
 
 const scanApiInfo = {
@@ -44,6 +45,10 @@ const scanApiInfo = {
     "Linea": {
         "endpoint": "https://api.lineascan.build/api",
         "key": "4EYQVJRXAQPCKKFCZXIQZQ1X6BHBIXM4ZK"
+    },
+    "Avalanche": {
+        "endpoint": "",
+        "key": ""
     }
 }
 
