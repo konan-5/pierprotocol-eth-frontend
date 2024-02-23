@@ -94,7 +94,20 @@ const networkConfig = {
         },
         "rpcUrls": ["https://linea.drpc.org"],
         "blockExplorerUrls": ["https://lineascan.build/"],
+    },
+
+    Avalanche: {
+        "chainId": "0xa86a",
+        "chainName": "Avalanche",
+        "nativeCurrency": {
+            "name": "Avalanche",
+            "symbol": "AVAX",
+            "decimals": 18,
+        },
+        "rpcUrls": ["https://avalanche.drpc.org"],
+        "blockExplorerUrls": ["https://snowtrace.io/"],
     }
+
 
 }
 
