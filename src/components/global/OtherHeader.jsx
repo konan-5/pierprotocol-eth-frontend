@@ -70,7 +70,7 @@ const OtherHeader = ({ comingSoon = false }) => {
 
     useEffect(() => {
         if (networko == "Solana") {
-            window.location.assing("https://solana.pierprotocol.com")
+            window.location.assign("https://solana.pierprotocol.com")
         }
         switchNetwork()
     }, [networko])
