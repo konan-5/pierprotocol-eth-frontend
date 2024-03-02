@@ -67,7 +67,7 @@ const OtherHeader = ({ comingSoon = false }) => {
 
     useEffect(() => {
         if (networko == "Solana") {
-            window.location.assign("https://pier-sol.pages.dev/dashboard")
+            window.location.assign("https://solana.pierprotocol.com/dashboard")
         }
         switchNetwork()
     }, [networko])
