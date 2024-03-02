@@ -70,7 +70,7 @@ const OtherHeader = ({ comingSoon = false }) => {
 
     useEffect(() => {
         if (networko == "Solana") {
-            window.location.href("http://65.109.85.204:5173/dashboard")
+            window.location.assing("https://solana.pierprotocol.com")
         }
         switchNetwork()
     }, [networko])
