@@ -11,7 +11,6 @@ import { useRouter as nextUseRouter } from "next/router";
 import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { networks } from '@/utils/constants';
-import { useLocation } from 'react-router-dom';
 
 const OtherHeader = ({ comingSoon = false }) => {
     const dispatch = useDispatch();
