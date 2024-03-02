@@ -6,5 +6,6 @@ export const networks = [
     'Base',
     'Scroll',
     "Linea",
-    "Avalanche"
+    "Avalanche",
+    "Solana"
 ]

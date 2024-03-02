@@ -5,9 +5,8 @@ import logo from "../../assets/images/logo.png";
 import Image from "next/image";
 import { networkSvgs } from '@/utils/svg';
 
-import { WalletMultiButton, setVisible, useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { networkConfig } from '@/utils/networkConfig';
+import { useRouter as nextUseRouter } from "next/router";
 
 import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,9 +23,9 @@ const OtherHeader = ({ comingSoon = false }) => {
     const [isNetworkOpen, setIsNetworkOpen] = useState(false);
 
     // const [network, setNetwork] = useState(networks[0]);
-    const network = useSelector((state) => state.app.network);
+    const networko = useSelector((state) => state.app.network);
 
-    const { seiConnectedWallet, seiAccounts } = useWallet();
+    const { seiConnectedWallet, seiAccounts } = useSeiWallet();
 
     const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
     const switchNetwork = async () => {
@@ -36,7 +35,7 @@ const OtherHeader = ({ comingSoon = false }) => {
                 // Try to switch to the desired network
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: networkConfig[network].chainId }], // Use the chainId from the networkConfig
+                    params: [{ chainId: networkConfig[networko].chainId }], // Use the chainId from the networkConfig
                 });
             } else {
                 console.log('MetaMask is not installed!');
@@ -48,7 +47,7 @@ const OtherHeader = ({ comingSoon = false }) => {
                     // Attempt to add the new network
                     await window.ethereum.request({
                         method: 'wallet_addEthereumChain',
-                        params: [networkConfig[network]], // Use the full networkConfig here
+                        params: [networkConfig[networko]], // Use the full networkConfig here
                     });
                 } catch (addError) {
                     // Handle errors like user rejection
@@ -66,15 +65,19 @@ const OtherHeader = ({ comingSoon = false }) => {
         }
     };
 
+    const nextRouter = nextUseRouter();
+    const { network } = nextRouter.query;
+
     useEffect(() => {
+        if (networko == "Solana") {
+            window.location.href("http://65.109.85.204:5173/dashboard")
+        }
         switchNetwork()
-    }, [network])
-
-    const { connection } = useConnection();
-    // const { publicKey, sendTransaction } = useWallet();
-    const { setVisible } = useWalletModal();
+    }, [networko])
 
     useEffect(() => {
+        if (network)
+            dispatch(setNetwork(query.get('network')))
         if (window.ethereum) {
             const _checkAccount = async () => {
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -114,18 +117,6 @@ const OtherHeader = ({ comingSoon = false }) => {
         }
     };
 
-    const checkIfWalletIsConnected = async () => {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            if (accounts.length > 0) {
-                setAccounts(accounts);
-                setIsConnected(true);
-            }
-        } catch (error) {
-            console.error("Error checking wallet connection", error);
-        }
-    };
-
     const connectWallet = async () => {
         try {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -159,7 +150,7 @@ const OtherHeader = ({ comingSoon = false }) => {
                                     </Link>
                                     <div className='config'>
                                         {
-                                            network == "Ethereum" &&
+                                            networko == "Ethereum" &&
                                             <div className='token-config'>
                                                 <a href="#" className={"btn-lg " + (activeToken == "erc20" ? "navbar-btn" : "")} onClick={() => setActiveToken("erc20")}>
                                                     <span>ERC-20</span>
@@ -174,9 +165,9 @@ const OtherHeader = ({ comingSoon = false }) => {
                                             <div ref={networkDropdownRef} className='select-network'>
                                                 <div className='selected-network' onClick={networkToggleDropdown}>
                                                     <div className='logo'>
-                                                        {networkSvgs[network]}
+                                                        {networkSvgs[networko]}
                                                     </div>
-                                                    <span>{network}</span>
+                                                    <span>{networko}</span>
                                                 </div>
                                                 {isNetworkOpen && (
                                                     <ul>
@@ -193,7 +184,7 @@ const OtherHeader = ({ comingSoon = false }) => {
                                             </div>
                                         </div>
                                         {
-                                            network == "Solana" ?
+                                            networko == "Solana" ?
                                                 // <WalletMultiButton /> 
                                                 <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
                                                     {isConnected ?
@@ -202,7 +193,7 @@ const OtherHeader = ({ comingSoon = false }) => {
                                                     }
                                                 </a>
                                                 : (
-                                                    network == "Sei" ?
+                                                    networko == "Sei" ?
                                                         <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
                                                             {seiConnectedWallet ?
                                                                 <span>Connected</span> :
