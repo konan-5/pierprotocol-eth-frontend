@@ -8,7 +8,6 @@ import { networkSvgs } from '@/utils/svg';
 import { networkConfig } from '@/utils/networkConfig';
 import { useRouter as nextUseRouter } from "next/router";
 
-import { useWallet as useSeiWallet, WalletConnectButton } from '@sei-js/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { networks } from '@/utils/constants';
 
@@ -24,8 +23,6 @@ const OtherHeader = ({ comingSoon = false }) => {
 
     // const [network, setNetwork] = useState(networks[0]);
     const networko = useSelector((state) => state.app.network);
-
-    const { seiConnectedWallet, seiAccounts } = useSeiWallet();
 
     const setNetwork = (newNetwork) => dispatch({ type: 'SET_NETWORK', payload: newNetwork });
     const switchNetwork = async () => {
@@ -127,15 +124,6 @@ const OtherHeader = ({ comingSoon = false }) => {
         }
     };
 
-    const connectSolana = () => {
-        // setVisible(true)
-        // setIsConnected(true);
-    }
-
-    const connectSei = () => {
-        // setIsConnected(true);
-    }
-
     return (
         <div className="other-header">
             <div className="container">
@@ -183,32 +171,12 @@ const OtherHeader = ({ comingSoon = false }) => {
                                                 )}
                                             </div>
                                         </div>
-                                        {
-                                            networko == "Solana" ?
-                                                // <WalletMultiButton /> 
-                                                <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSolana}>
-                                                    {isConnected ?
-                                                        <span>Connected</span> :
-                                                        <span>Connect Wallet</span>
-                                                    }
-                                                </a>
-                                                : (
-                                                    networko == "Sei" ?
-                                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectSei}>
-                                                            {seiConnectedWallet ?
-                                                                <span>Connected</span> :
-                                                                <span style={{ fontSize: "18px", fontWeight: "bolder" }}><WalletConnectButton /></span>
-                                                            }
-                                                        </a>
-                                                        :
-                                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
-                                                            {isConnected ?
-                                                                <span>{`${accounts[0].toString().substr(0, 3)}...${accounts[0].toString().substr(-5)}`}</span> :
-                                                                <span>Connect Wallet</span>
-                                                            }
-                                                        </a>
-                                                )
-                                        }
+                                        <a href="#" className="btn-lg navbar-btn connect-wallet" onClick={connectWallet}>
+                                            {isConnected ?
+                                                <span>{`${accounts[0].toString().substr(0, 3)}...${accounts[0].toString().substr(-5)}`}</span> :
+                                                <span>Connect Wallet</span>
+                                            }
+                                        </a>
                                     </div>
                                 </>
                             }
